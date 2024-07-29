@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/adMob/home_route.dart';
 import 'package:setup_app/pages/new_page.dart';
@@ -8,16 +10,21 @@ class NavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = FirebaseAuth.instance.currentUser;
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: const Text('Hacker'),
-            accountEmail: const Text('hacker.email.com'),
-            currentAccountPicture: const CircleAvatar(
-              child: FlutterLogo(size: 42.0),
-            ),
+            accountName: Text(user!.displayName!),
+            accountEmail: user.email != null ? Text(user.email!) : Text('You'),
+            currentAccountPicture: user.photoURL != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage(user.photoURL!),
+                  )
+                : const CircleAvatar(
+                    child: UserAvatar(size: 42.0),
+                  ),
             decoration: BoxDecoration(color: Colors.blueGrey[800]),
           ),
           ListTile(
