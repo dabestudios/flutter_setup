@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
 import 'package:setup_app/pages/navbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NewPage extends StatefulWidget {
   const NewPage({super.key});
 
   @override
-  _NewPage createState() => _NewPage();
+  _NewPageState createState() => _NewPageState();
 }
 
-class _NewPage extends State<NewPage> {
+class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
+  bool _isAdsInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    _initGoogleMobileAds();
+  }
+
+  Future<void> _initGoogleMobileAds() async {
+    await MobileAds.instance.initialize();
+    setState(() {
+      _isAdsInitialized = true;
+    });
+    _loadBannerAd();
+  }
+
+  void _loadBannerAd() {
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
       request: AdRequest(),
@@ -38,7 +49,7 @@ class _NewPage extends State<NewPage> {
 
   @override
   void dispose() {
-    // COMPLETE: Dispose a BannerAd object
+    // Dispose the BannerAd object
     _bannerAd?.dispose();
     super.dispose();
   }
@@ -59,7 +70,8 @@ class _NewPage extends State<NewPage> {
               'Welcome to the New Page!',
               style: TextStyle(fontSize: 24),
             ),
-            if (_bannerAd != null)
+            Spacer(),
+            if (_bannerAd != null && _isAdsInitialized)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
