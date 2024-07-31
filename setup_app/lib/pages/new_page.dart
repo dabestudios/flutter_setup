@@ -61,8 +61,7 @@ class _NewPageState extends State<NewPage> {
       appBar: AppBar(
         title: const Text('New Page'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
