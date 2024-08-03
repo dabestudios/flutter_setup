@@ -1,0 +1,173 @@
+[
+  {
+    "name": "Bíceps con mancuerna",
+    "description": "Levanta las mancuernas flexionando los codos.",
+    "id": 0,
+    "category": "Brazo"
+  },
+  {
+    "name": "Tríceps con polea alta",
+    "description": "Estira y contrae los tríceps utilizando una polea alta.",
+    "id": 1,
+    "category": "Brazo"
+  },
+  {
+    "name": "Curl de bíceps con barra",
+    "description": "Levanta una barra con pesas flexionando los codos.",
+    "id": 2,
+    "category": "Brazo"
+  },
+  {
+    "name": "Flexiones de tríceps en banco",
+    "description": "Realiza flexiones apoyando las manos en un banco para trabajar los tríceps.",
+    "id": 3,
+    "category": "Brazo"
+  },
+  {
+    "name": "Sentadillas",
+    "description": "Flexiona las rodillas y baja el cuerpo como si te sentaras.",
+    "id": 4,
+    "category": "Pierna"
+  },
+  {
+    "name": "Prensa de piernas",
+    "description": "Empuja una plataforma con pesas utilizando las piernas.",
+    "id": 5,
+    "category": "Pierna"
+  },
+  {
+    "name": "Zancadas",
+    "description": "Da pasos largos hacia adelante, flexionando ambas rodillas.",
+    "id": 6,
+    "category": "Pierna"
+  },
+  {
+    "name": "Elevación de talones",
+    "description": "Levanta los talones para trabajar los músculos de la pantorrilla.",
+    "id": 7,
+    "category": "Pierna"
+  },
+  {
+    "name": "Press de banca",
+    "description": "Levanta una barra con pesas acostado en un banco.",
+    "id": 8,
+    "category": "Pecho"
+  },
+  {
+    "name": "Flexiones de pecho",
+    "description": "Realiza flexiones para fortalecer los músculos pectorales.",
+    "id": 9,
+    "category": "Pecho"
+  },
+  {
+    "name": "Pull-over con mancuerna",
+    "description": "Extiende una mancuerna por encima de la cabeza para trabajar el pecho.",
+    "id": 10,
+    "category": "Pecho"
+  },
+  {
+    "name": "Máquina de pecho",
+    "description": "Utiliza una máquina de resistencia para ejercitar los músculos pectorales.",
+    "id": 11,
+    "category": "Pecho"
+  },
+  {
+    "name": "Press militar",
+    "description": "Levanta una barra sobre la cabeza de pie.",
+    "id": 12,
+    "category": "Hombro"
+  },
+  {
+    "name": "Elevaciones laterales",
+    "description": "Levanta pesas hacia los lados para trabajar los deltoides.",
+    "id": 13,
+    "category": "Hombro"
+  },
+  {
+    "name": "Encogimientos de hombros",
+    "description": "Sube y baja los hombros con pesas para fortalecer los trapecios.",
+    "id": 14,
+    "category": "Hombro"
+  },
+  {
+    "name": "Crunches",
+    "description": "Realiza crunches para trabajar los músculos abdominales.",
+    "id": 15,
+    "category": "Abdominales"
+  },
+  {
+    "name": "Plancha",
+    "description": "Mantén una posición de plancha para fortalecer el core.",
+    "id": 16,
+    "category": "Abdominales"
+  },
+  {
+    "name": "Giros rusos",
+    "description": "Realiza giros con pesas para trabajar los oblicuos.",
+    "id": 17,
+    "category": "Abdominales"
+  },
+  {
+    "name": "Estiramientos de piernas",
+    "description": "Realiza estiramientos para mejorar la flexibilidad de las piernas.",
+    "id": 18,
+    "category": "Estiramientos"
+  },
+  {
+    "name": "Yoga",
+    "description": "Practica yoga para mejorar la flexibilidad y la relajación.",
+    "id": 19,
+    "category": "Estiramientos"
+  },
+  {
+    "name": "Burpees",
+    "description": "Combina saltos, flexiones y sentadillas en un ejercicio completo.",
+    "id": 20,
+    "category": "Cardio"
+  },
+  {
+    "name": "Correr",
+    "description": "Realiza sesiones de running para mejorar la resistencia cardiovascular.",
+    "id": 21,
+    "category": "Cardio"
+  },
+  {
+    "name": "Ciclismo",
+    "description": "Pedalea en una bicicleta para un ejercicio cardiovascular de bajo impacto.",
+    "id": 22,
+    "category": "Cardio"
+  },
+  {
+    "name": "Natación",
+    "description": "Nada para un ejercicio cardiovascular de cuerpo completo.",
+    "id": 23,
+    "category": "Cardio"
+  },  
+  {
+    "name": "Flexiones de brazos",
+    "description": "Realiza flexiones para fortalecer los músculos del brazo y pecho.",
+    "id": 24,
+    "category": "Brazo"
+  },
+  {
+    "name": "Elevaciones frontales",
+    "description": "Levanta pesas hacia adelante para trabajar los deltoides frontales.",
+    "id": 25,
+    "category": "Hombro"
+  },
+  {
+    "name": "Mountain climbers",
+    "description": "Realiza ejercicios de mountain climbers para un entrenamiento cardiovascular.",
+    "id": 26,
+    "category": "Cardio"
+  },
+  {
+    "name": "Burpees",
+    "description": "Combina saltos, flexiones y sentadillas en un ejercicio completo.",
+    "id": 27,
+    "category": "Cardio"
+  }
+]
+  
+ 
+  

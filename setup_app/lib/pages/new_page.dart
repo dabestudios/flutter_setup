@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
-import 'package:setup_app/pages/navbar.dart';
+import 'package:setup_app/exercise.dart';
+import 'package:setup_app/main.dart';
+import 'navbar.dart';
 
 class NewPage extends StatefulWidget {
   const NewPage({super.key});
@@ -13,11 +15,13 @@ class NewPage extends StatefulWidget {
 class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
+    _loadExercises();
   }
 
   Future<void> _initGoogleMobileAds() async {
@@ -31,7 +35,7 @@ class _NewPageState extends State<NewPage> {
   void _loadBannerAd() {
     BannerAd(
       adUnitId: AdHelper.bannerAdUnitId,
-      request: AdRequest(),
+      request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
@@ -45,6 +49,13 @@ class _NewPageState extends State<NewPage> {
         },
       ),
     ).load();
+  }
+
+  Future<void> _loadExercises() async {
+    await loadExercises();
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -69,6 +80,26 @@ class _NewPageState extends State<NewPage> {
               'Welcome to the New Page!',
               style: TextStyle(fontSize: 24),
             ),
+            const Spacer(),
+            // Display the first exercise
+            if (_isLoading)
+              const CircularProgressIndicator()
+            else if (globalExercises.isNotEmpty)
+              Column(
+                children: [
+                  Text(
+                    globalExercises[0].name ?? 'No Name',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  ...globalExercises[0]
+                          .instructions
+                          ?.map((instruction) => Text(instruction))
+                          .toList() ??
+                      [Text('No Instructions')],
+                ],
+              )
+            else
+              const Text('No Exercises Found'),
             Spacer(),
             if (_bannerAd != null && _isAdsInitialized)
               Align(
