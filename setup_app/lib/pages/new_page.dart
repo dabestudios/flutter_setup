@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
-import 'package:setup_app/exercise.dart';
+import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/main.dart';
 import 'navbar.dart';
 

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/auth/auth_gate.dart';
-import 'package:setup_app/exercise.dart';
+import 'package:setup_app/tables/exercise.dart';
 import 'auth/firebase_options.dart';
 
 const clientId =

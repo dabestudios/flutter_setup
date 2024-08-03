@@ -1,0 +1,53 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table Exercises {
+  id text [primary key]
+  name text
+  force text
+  level text
+  mechanic text
+  equipment text
+  primaryMuscles text
+  secondaryMuscles text
+  instructions text
+  category text
+  images text
+}
+
+Table Routines {
+  id text [primary key]
+  name text
+  lastdate datetime
+}
+
+Table RoutineExercises  {
+  routineId  text  [primary key] //[ref: > Routines.id] 
+  exerciseId  text [primary key] //[ref: > Exercises.id] 
+  series text
+  repetitions integer
+  }
+
+Ref: RoutineExercises.routineId > Routines.id // many-to-one
+Ref: RoutineExercises.exerciseId > Exercises.id // many-to-one
+
+
+/* 
+1. Datos de Ejercicios
+Fuente: Un archivo JSON de solo lectura que contiene todos los ejercicios con sus datos detallados.
+
+Carga de Ejercicios:
+
+Cargar los datos del archivo JSON y almacenarlos en la tabla Exercises.
+Esta operación se realiza solo una vez o cuando se actualizan los datos de ejercicios.
+Creación de Rutinas:
+
+El usuario selecciona ejercicios para crear una nueva rutina.
+Crear una entrada en la tabla Routines con un identificador único y nombre de la rutina.
+Asociación de Ejercicios a Rutinas:
+
+Para cada ejercicio seleccionado, añadir una entrada en la tabla RoutineExercises con el routineId, exerciseId, series y repetitions.
+Esto asegura que cada rutina contiene solo referencias a los ejercicios, evitando la duplicación de datos.
+
+
+ */
