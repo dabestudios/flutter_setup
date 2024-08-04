@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:setup_app/auth/auth_gate.dart';
 import 'package:setup_app/tables/exercise.dart';
+import 'package:setup_app/theme/themes.dart';
 import 'auth/firebase_options.dart';
 
 const clientId =
@@ -19,22 +21,35 @@ void main() async {
   runApp(MyApp());
 }
 
+class ThemeNotifier extends ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.system;
+
+  ThemeMode get themeMode => _themeMode;
+
+  void toggleTheme(bool isDarkMode) {
+    _themeMode = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
+  }
+}
+
 class MyApp extends StatelessWidget {
+  final ThemeNotifier _themeNotifier = ThemeNotifier();
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Long Buttons App',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blueGrey,
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: Colors.blueGrey[800],
-          ),
-        ),
+    return ChangeNotifierProvider<ThemeNotifier>(
+      create: (_) => _themeNotifier,
+      child: Consumer<ThemeNotifier>(
+        builder: (context, theme, _) {
+          return MaterialApp(
+            title: 'Long Buttons App',
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: theme.themeMode,
+            home: AuthGate(),
+          );
+        },
       ),
-      home: AuthGate(),
     );
   }
 }
