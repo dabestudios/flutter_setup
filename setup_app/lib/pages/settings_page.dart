@@ -15,17 +15,24 @@ class SettingsPage extends StatelessWidget {
             title: Text('Dark Mode'),
             trailing: Consumer<ThemeNotifier>(
               builder: (context, notifier, child) {
+                // Determinar si el sistema está en modo oscuro
+                bool isSystemDarkMode =
+                    MediaQuery.of(context).platformBrightness ==
+                        Brightness.dark;
+                // Ajustar el switch según la preferencia del usuario o el modo del sistema
+                bool isDarkMode = notifier.themeMode == ThemeMode.system
+                    ? isSystemDarkMode
+                    : notifier.themeMode == ThemeMode.dark;
+
                 return AnimatedSwitcher(
-                  duration: Duration(
-                      milliseconds:
-                          750), // Duración personalizada de la animación
+                  duration: Duration(milliseconds: 750),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
                     return ScaleTransition(scale: animation, child: child);
                   },
                   child: Switch(
-                    key: ValueKey<bool>(notifier.themeMode == ThemeMode.dark),
-                    value: notifier.themeMode == ThemeMode.dark,
+                    key: ValueKey<bool>(isDarkMode),
+                    value: isDarkMode,
                     onChanged: (value) {
                       notifier.toggleTheme(value);
                     },
