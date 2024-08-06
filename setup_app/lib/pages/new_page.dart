@@ -16,12 +16,13 @@ class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
   bool _isLoading = true;
+  List<Exercise> _selectedExercises = [];
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
-    _loadExercises();
+    _loadData();
   }
 
   Future<void> _initGoogleMobileAds() async {
@@ -51,11 +52,26 @@ class _NewPageState extends State<NewPage> {
     ).load();
   }
 
-  Future<void> _loadExercises() async {
+  Future<void> _loadData() async {
     await loadExercises();
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void _toggleExerciseSelection(Exercise exercise) {
+    setState(() {
+      if (_selectedExercises.contains(exercise)) {
+        _selectedExercises.remove(exercise);
+      } else {
+        _selectedExercises.add(exercise);
+      }
+    });
+  }
+
+  void _createRoutine() {
+    // Aquí puedes implementar la navegación a una nueva página para confirmar y guardar la rutina
+    // Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRoutinePage(selectedExercises: _selectedExercises)));
   }
 
   @override
@@ -71,6 +87,13 @@ class _NewPageState extends State<NewPage> {
       drawer: const NavBar(),
       appBar: AppBar(
         title: const Text('New Page'),
+        actions: [
+          if (_selectedExercises.isNotEmpty)
+            IconButton(
+              icon: const Icon(Icons.check),
+              onPressed: _createRoutine,
+            ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -98,42 +121,56 @@ class _NewPageState extends State<NewPage> {
                   itemCount: globalExercises.length,
                   itemBuilder: (context, index) {
                     final exercise = globalExercises[index];
-                    return ElevatedButton(
-                      onPressed: () {
-                        // Acción al presionar el botón del ejercicio
-                      },
-                      style: ElevatedButton.styleFrom(
-                        // Color del texto del botón
-                        padding: const EdgeInsets.all(
-                            8.0), // Espaciado interno del botón
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Bordes redondeados
+                    final isSelected = _selectedExercises.contains(exercise);
+                    return GestureDetector(
+                      onTap: () => _toggleExerciseSelection(exercise),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(0.5)
+                              : Theme.of(context).colorScheme.background,
+                          borderRadius: BorderRadius.circular(10.0),
+                          border: Border.all(
+                            color: isSelected
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.grey,
+                            width: 2.0,
+                          ),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            exercise.name ?? 'No Name',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              exercise.name,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Theme.of(context)
+                                        .colorScheme
+                                        .onBackground,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            exercise.primaryMuscles.isNotEmpty
-                                ? exercise.primaryMuscles[0]
-                                : 'No Primary Muscle',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
+                            const SizedBox(height: 8.0),
+                            Text(
+                              exercise.primaryMuscles.isNotEmpty
+                                  ? exercise.primaryMuscles[0]
+                                  : 'No Primary Muscle',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: isSelected
+                                    ? Theme.of(context).colorScheme.onPrimary
+                                    : Colors.grey,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

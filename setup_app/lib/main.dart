@@ -5,6 +5,7 @@ import 'package:setup_app/auth/auth_gate.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/theme/themes.dart';
 import 'auth/firebase_options.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 const clientId =
     '604232348381-vqjjs0pa8h0h0kh5hmomog78tv3s58a7.apps.googleusercontent.com';
@@ -43,8 +44,8 @@ class MyApp extends StatelessWidget {
         builder: (context, theme, _) {
           return MaterialApp(
             title: 'Long Buttons App',
-            theme: lightTheme,
-            darkTheme: darkTheme,
+            theme: FlexThemeData.light(scheme: FlexScheme.mandyRed),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.mandyRed),
             themeMode: theme.themeMode,
             home: AuthGate(),
           );
