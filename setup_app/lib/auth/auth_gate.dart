@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/main.dart';
+import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/pages/new_page.dart';
 
 class AuthGate extends StatelessWidget {
@@ -47,7 +48,7 @@ class AuthGate extends StatelessWidget {
           );
         }
 
-        return const NewPage();
+        return HomePage();
       },
     );
   }

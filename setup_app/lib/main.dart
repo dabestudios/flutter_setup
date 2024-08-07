@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:setup_app/auth/auth_gate.dart';
 import 'package:setup_app/tables/exercise.dart';
-import 'package:setup_app/theme/themes.dart';
 import 'auth/firebase_options.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 

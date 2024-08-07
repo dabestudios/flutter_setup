@@ -84,108 +84,116 @@ class _NewPageState extends State<NewPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavBar(),
       appBar: AppBar(
-        title: const Text('New Page'),
-        actions: [
-          if (_selectedExercises.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.check),
-              onPressed: _createRoutine,
+        title: const Text('Create Routine'),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: const Text(
+              'Select Exercises',
+              style: TextStyle(fontSize: 24),
+            ),
+          ),
+          const SizedBox(height: 16.0),
+          // Mostrar indicador de carga o los ejercicios
+          if (_isLoading)
+            const CircularProgressIndicator() // Indicador de carga mientras se cargan los ejercicios
+          else if (globalExercises.isNotEmpty)
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2, // Número de columnas en la cuadrícula
+                  childAspectRatio:
+                      3 / 2, // Relación de aspecto de los elementos
+                  mainAxisSpacing:
+                      10, // Espaciado entre elementos en la dirección principal
+                  crossAxisSpacing:
+                      10, // Espaciado entre elementos en la dirección transversal
+                ),
+                itemCount: globalExercises.length,
+                itemBuilder: (context, index) {
+                  final exercise = globalExercises[index];
+                  final isSelected = _selectedExercises.contains(exercise);
+                  return GestureDetector(
+                    onTap: () => _toggleExerciseSelection(exercise),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(0.5)
+                            : Theme.of(context).colorScheme.background,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: isSelected
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                          width: 2.0,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            exercise.name,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Theme.of(context).colorScheme.onBackground,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            'Muscle', // Reemplaza con la lógica adecuada para los músculos primarios
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.onPrimary
+                                  : Colors.grey,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+          else
+            const Text('No Exercises Found'),
+          if (_bannerAd != null && _isAdsInitialized)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                width: _bannerAd!.size.width.toDouble(),
+                height: _bannerAd!.size.height.toDouble(),
+                child: AdWidget(ad: _bannerAd!),
+              ),
             ),
         ],
       ),
-      body: Center(
-        child: Column(
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'Welcome to the New Page!',
-              style: TextStyle(fontSize: 24),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                '${_selectedExercises.length} Exercises Selected',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
-            const SizedBox(height: 16.0),
-            // Mostrar indicador de carga o los ejercicios
-            if (_isLoading)
-              const CircularProgressIndicator() // Indicador de carga mientras se cargan los ejercicios
-            else if (globalExercises.isNotEmpty)
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Número de columnas en la cuadrícula
-                    childAspectRatio:
-                        3 / 2, // Relación de aspecto de los elementos
-                    mainAxisSpacing:
-                        10, // Espaciado entre elementos en la dirección principal
-                    crossAxisSpacing:
-                        10, // Espaciado entre elementos en la dirección transversal
-                  ),
-                  itemCount: globalExercises.length,
-                  itemBuilder: (context, index) {
-                    final exercise = globalExercises[index];
-                    final isSelected = _selectedExercises.contains(exercise);
-                    return GestureDetector(
-                      onTap: () => _toggleExerciseSelection(exercise),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: isSelected
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .primary
-                                  .withOpacity(0.5)
-                              : Theme.of(context).colorScheme.background,
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.grey,
-                            width: 2.0,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              exercise.name,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Theme.of(context)
-                                        .colorScheme
-                                        .onBackground,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 8.0),
-                            Text(
-                              exercise.primaryMuscles.isNotEmpty
-                                  ? exercise.primaryMuscles[0]
-                                  : 'No Primary Muscle',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: isSelected
-                                    ? Theme.of(context).colorScheme.onPrimary
-                                    : Colors.grey,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            else
-              const Text('No Exercises Found'),
-            if (_bannerAd != null && _isAdsInitialized)
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: _bannerAd!.size.width.toDouble(),
-                  height: _bannerAd!.size.height.toDouble(),
-                  child: AdWidget(ad: _bannerAd!),
-                ),
+            if (_selectedExercises.isNotEmpty)
+              TextButton(
+                child: Text('Save Routine'),
+                onPressed: _createRoutine,
               ),
           ],
         ),
