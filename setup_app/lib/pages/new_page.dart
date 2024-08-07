@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
+import 'package:setup_app/pages/review_and_edit_routine.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/main.dart';
 import 'navbar.dart';
@@ -71,7 +72,16 @@ class _NewPageState extends State<NewPage> {
 
   void _createRoutine() {
     // Aquí puedes implementar la navegación a una nueva página para confirmar y guardar la rutina
-    // Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRoutinePage(selectedExercises: _selectedExercises)));
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ReviewAndEditPage(
+                  selectedExercises: _selectedExercises,
+                  onSave: () {
+                    // Implementa la lógica para guardar la rutina aquí
+                    Navigator.pop(context);
+                  },
+                )));
   }
 
   @override
