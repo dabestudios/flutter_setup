@@ -119,93 +119,120 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                         physics: NeverScrollableScrollPhysics(),
                         itemCount: routineExercise.repetitions.length,
                         itemBuilder: (context, seriesIndex) {
-                          return Row(
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () =>
-                                    _removeSeries(index, seriesIndex),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () {
-                                  final currentReps =
-                                      routineExercise.repetitions[seriesIndex];
-                                  if (currentReps > 0) {
-                                    _updateReps(
-                                        index, seriesIndex, currentReps - 1);
-                                  }
-                                },
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    labelText: 'Reps',
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Contenedor de Reps con estilo
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 1.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(12.0),
                                   ),
-                                  onChanged: (value) {
-                                    final reps = int.tryParse(value) ?? 0;
-                                    if (reps > 0) {
-                                      _updateReps(index, seriesIndex, reps);
-                                    }
-                                  },
-                                  controller: TextEditingController(
-                                    text: routineExercise
-                                        .repetitions[seriesIndex]
-                                        .toString(),
+                                  child: Row(
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.remove),
+                                        onPressed: () {
+                                          final currentReps = routineExercise
+                                              .repetitions[seriesIndex];
+                                          if (currentReps > 0) {
+                                            _updateReps(index, seriesIndex,
+                                                currentReps - 1);
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                        child: TextField(
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            labelText: 'Reps',
+                                            border: InputBorder.none,
+                                          ),
+                                          onChanged: (value) {
+                                            final reps =
+                                                int.tryParse(value) ?? 0;
+                                            if (reps > 0) {
+                                              _updateReps(
+                                                  index, seriesIndex, reps);
+                                            }
+                                          },
+                                          controller: TextEditingController(
+                                            text: routineExercise
+                                                .repetitions[seriesIndex]
+                                                .toString(),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.add),
+                                        onPressed: () {
+                                          final currentReps = routineExercise
+                                              .repetitions[seriesIndex];
+                                          _updateReps(index, seriesIndex,
+                                              currentReps + 1);
+                                        },
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.remove),
+                                        onPressed: () {
+                                          final currentWeight = routineExercise
+                                              .weights[seriesIndex];
+                                          if (currentWeight > 0) {
+                                            _updateWeight(index, seriesIndex,
+                                                currentWeight - 1);
+                                          }
+                                        },
+                                      ),
+                                      SizedBox(
+                                        width: 50,
+                                        child: TextField(
+                                          keyboardType: TextInputType.number,
+                                          decoration: InputDecoration(
+                                            labelText: 'Kg',
+                                            border: InputBorder.none,
+                                          ),
+                                          onChanged: (value) {
+                                            final weight =
+                                                int.tryParse(value) ?? 0;
+                                            if (weight >= 0) {
+                                              _updateWeight(
+                                                  index, seriesIndex, weight);
+                                            }
+                                          },
+                                          controller: TextEditingController(
+                                            text: routineExercise
+                                                .weights[seriesIndex]
+                                                .toString(),
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.add),
+                                        onPressed: () {
+                                          final currentWeight = routineExercise
+                                              .weights[seriesIndex];
+                                          _updateWeight(index, seriesIndex,
+                                              currentWeight + 1);
+                                        },
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  final currentReps =
-                                      routineExercise.repetitions[seriesIndex];
-                                  if (currentReps > 0) {
-                                    _updateReps(
-                                        index, seriesIndex, currentReps + 1);
-                                  }
-                                },
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.remove),
-                                onPressed: () {
-                                  final currentWeight =
-                                      routineExercise.weights[seriesIndex];
-                                  if (currentWeight > 0) {
-                                    _updateWeight(
-                                        index, seriesIndex, currentWeight - 1);
-                                  }
-                                },
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  keyboardType: TextInputType.number,
-                                  decoration: InputDecoration(
-                                    labelText: 'Kg',
-                                  ),
-                                  onChanged: (value) {
-                                    final weight = int.tryParse(value) ?? 0;
-                                    if (weight >= 0) {
-                                      _updateWeight(index, seriesIndex, weight);
-                                    }
-                                  },
-                                  controller: TextEditingController(
-                                    text: routineExercise.weights[seriesIndex]
-                                        .toString(),
-                                  ),
+                                // Botón de eliminar serie
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () =>
+                                      _removeSeries(index, seriesIndex),
                                 ),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.add),
-                                onPressed: () {
-                                  final currentWeight =
-                                      routineExercise.weights[seriesIndex];
-                                  _updateWeight(
-                                      index, seriesIndex, currentWeight + 1);
-                                },
-                              ),
-                            ],
+                              ],
+                            ),
                           );
                         },
                       ),
