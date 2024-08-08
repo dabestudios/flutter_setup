@@ -31,6 +31,8 @@ class RepsOrWeightEditor extends StatelessWidget {
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: label,
+              border: InputBorder.none,
+              alignLabelWithHint: true, // Alinea la etiqueta con el campo
             ),
             onChanged: (value) {
               final intValue = int.tryParse(value) ?? 0;

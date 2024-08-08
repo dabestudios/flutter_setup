@@ -121,11 +121,11 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                         itemCount: routineExercise.repetitions.length,
                         itemBuilder: (context, seriesIndex) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Container(
+                                  color: Colors.grey,
                                   child: Row(
                                     children: [
                                       RepsOrWeightEditor(
