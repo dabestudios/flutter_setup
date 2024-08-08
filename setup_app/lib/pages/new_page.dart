@@ -77,9 +77,8 @@ class _NewPageState extends State<NewPage> {
         MaterialPageRoute(
             builder: (context) => ReviewAndEditPage(
                   selectedExercises: _selectedExercises,
-                  onSave: () {
-                    // Implementa la lógica para guardar la rutina aquí
-                    Navigator.pop(context);
+                  onSave: (routine) {
+                    // Implementa la lógica para guardar la rutina en la base de datos
                   },
                 )));
   }
