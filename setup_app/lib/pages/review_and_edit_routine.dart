@@ -125,7 +125,11 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                             child: Row(
                               children: [
                                 Container(
-                                  color: Colors.grey,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.circular(
+                                        10.0), // Aquí defines el radio de los bordes redondeados
+                                  ),
                                   child: Row(
                                     children: [
                                       RepsOrWeightEditor(
