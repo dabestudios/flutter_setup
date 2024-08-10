@@ -129,11 +129,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                             padding: const EdgeInsets.symmetric(vertical: 5.0),
                             child: Row(
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: theme.colorScheme.inversePrimary,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
+                                Expanded(
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -146,6 +142,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                                         label: 'Reps',
                                         isReps: true,
                                       ),
+                                      const Spacer(),
                                       RepsOrWeightEditor(
                                         value: routineExercise
                                             .weights[seriesIndex],

@@ -17,60 +17,66 @@ class RepsOrWeightEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.remove, size: 15),
-          onPressed: () {
-            if (value > 0) {
-              onValueChanged(value - 1);
-            }
-          },
+    final theme = Theme.of(context);
+    return Container(
+        decoration: BoxDecoration(
+          color: theme.colorScheme.inversePrimary,
+          borderRadius: BorderRadius.circular(15.0),
         ),
-        SizedBox(
-          width: 55,
-          child: Stack(
-            children: [
-              Column(children: [
-                SizedBox(height: 3),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Theme.of(context).hintColor,
+        child: Row(
+          children: [
+            IconButton(
+              icon: Icon(Icons.remove, size: 15),
+              onPressed: () {
+                if (value > 0) {
+                  onValueChanged(value - 1);
+                }
+              },
+            ),
+            SizedBox(
+              width: 55,
+              child: Stack(
+                children: [
+                  Column(children: [
+                    SizedBox(height: 3),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).hintColor,
+                        ),
+                      ),
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-                TextField(
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    alignLabelWithHint: true,
-                  ),
-                  onChanged: (value) {
-                    final intValue = int.tryParse(value) ?? 0;
-                    onValueChanged(intValue);
-                  },
-                  controller: TextEditingController(
-                    text: this.value.toString(),
-                  ),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16), // Tamaño del texto principal
-                ),
-              ]),
-            ],
-          ),
-        ),
-        IconButton(
-          icon: Icon(Icons.add, size: 15),
-          onPressed: () {
-            onValueChanged(value + 1);
-          },
-        ),
-      ],
-    );
+                    TextField(
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        alignLabelWithHint: true,
+                      ),
+                      onChanged: (value) {
+                        final intValue = int.tryParse(value) ?? 0;
+                        onValueChanged(intValue);
+                      },
+                      controller: TextEditingController(
+                        text: this.value.toString(),
+                      ),
+                      textAlign: TextAlign.center,
+                      style:
+                          TextStyle(fontSize: 22), // Tamaño del texto principal
+                    ),
+                  ]),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.add, size: 15),
+              onPressed: () {
+                onValueChanged(value + 1);
+              },
+            ),
+          ],
+        ));
   }
 }
