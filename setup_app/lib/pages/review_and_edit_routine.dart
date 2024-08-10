@@ -1,8 +1,11 @@
+// review_and_edit_page.dart
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
+import 'package:setup_app/tables/routine_storage.dart';
 import 'package:setup_app/widgets/RepsOrWeightEditor.dart';
 
 class ReviewAndEditPage extends StatefulWidget {
@@ -18,6 +21,8 @@ class ReviewAndEditPage extends StatefulWidget {
 class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
   late List<RoutineExercise> _editableExercises;
   final TextEditingController _routineNameController = TextEditingController();
+  final RoutineStorage routineStorage = RoutineStorage();
+
   bool _isRoutineNameEmpty = true;
 
   @override
@@ -27,8 +32,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       return RoutineExercise(
         routineId: '',
         exerciseId: exercise.id,
-        repetitions: [10, 10, 10], // Tres series de 10 repeticiones por defecto
-        weights: [20, 20, 20], // Tres series de 20 kg por defecto
+        repetitions: [10, 10, 10],
+        weights: [20, 20, 20],
       );
     }).toList();
 
@@ -43,12 +48,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
 
   void _addSeries(int index) {
     setState(() {
-      _editableExercises[index]
-          .repetitions
-          .add(10); // Añade una nueva serie con 10 repeticiones
-      _editableExercises[index]
-          .weights
-          .add(20); // Añade una nueva serie con 20 kg
+      _editableExercises[index].repetitions.add(10);
+      _editableExercises[index].weights.add(20);
     });
   }
 
@@ -73,7 +74,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     });
   }
 
-  void _saveRoutine() {
+  Future<void> _saveRoutine() async {
     final routine = Routine(
       id: UniqueKey().toString(),
       name: _routineNameController.text,
@@ -82,32 +83,37 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     );
 
     // Guardar la rutina en la base de datos
-    _saveRoutineToDatabase(routine);
+    await _saveRoutineToDatabase(routine);
 
     // Guardar estadísticas de ejercicios para esta rutina
-    for (var exercise in _editableExercises) {
-      final stats = ExerciseStats(
-        id: UniqueKey().toString(),
-        exerciseId: exercise.exerciseId,
-        routineId: routine.id,
-        date: DateTime.now(),
-        repetitions: exercise.repetitions,
-        weights: exercise.weights,
-      );
-      _saveExerciseStatsToDatabase(stats);
-    }
-
-    // Llamar a la función de guardado proporcionada
     widget.onSave(routine);
   }
 
-  void _saveRoutineToDatabase(Routine routine) {
-    print(routine.toMap());
-    // Implementar la lógica para guardar la rutina en la base de datos
+  Future<void> _saveRoutineToDatabase(Routine routine) async {
+    try {
+      // Cargar las rutinas existentes
+      List<Routine> routines = await routineStorage.loadRoutines();
+
+      // Mostrar rutinas cargadas en la consola (opcional)
+      print('Rutinas cargadas: $routines');
+
+      // Agregar la nueva rutina a la lista de rutinas existentes
+      routines.add(routine);
+
+      // Convertir la lista actualizada a JSON
+      String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
+
+      // Guardar el JSON en el archivo local
+      final file = await routineStorage.getLocalFile();
+      await file.writeAsString(jsonString);
+
+      print('Rutina guardada exitosamente');
+    } catch (e) {
+      print("Error saving routine: $e");
+    }
   }
 
   void _saveExerciseStatsToDatabase(ExerciseStats stats) {
-    //print(stats.toMap());
     // Implementar la lógica para guardar las estadísticas del ejercicio en la base de datos
   }
 

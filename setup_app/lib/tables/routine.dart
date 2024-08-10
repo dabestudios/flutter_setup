@@ -22,4 +22,24 @@ class Routine {
       'exercises': exercises.map((e) => e.toJson()).toList(),
     };
   }
+
+  static Routine fromJson(Map<String, dynamic> json) {
+    return Routine(
+      id: json['id'],
+      name: json['name'],
+      lastDate: DateTime.parse(json['lastDate']),
+      exercises: List<RoutineExercise>.from(
+          json['exercises'].map((e) => RoutineExercise.fromJson(e))),
+    );
+  }
+
+  // Método para convertir a un formato JSON si estás guardando en un archivo
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'lastDate': lastDate.toIso8601String(),
+      'exercises': exercises.map((e) => e.toJson()).toList(),
+    };
+  }
 }
