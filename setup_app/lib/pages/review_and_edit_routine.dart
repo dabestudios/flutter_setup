@@ -17,6 +17,7 @@ class ReviewAndEditPage extends StatefulWidget {
 class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
   late List<RoutineExercise> _editableExercises;
   final TextEditingController _routineNameController = TextEditingController();
+  bool _isRoutineNameEmpty = true;
 
   @override
   void initState() {
@@ -29,6 +30,14 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
         weights: [20, 20, 20], // Tres series de 20 kg por defecto
       );
     }).toList();
+
+    _routineNameController.addListener(_onRoutineNameChanged);
+  }
+
+  void _onRoutineNameChanged() {
+    setState(() {
+      _isRoutineNameEmpty = _routineNameController.text.isEmpty;
+    });
   }
 
   void _addSeries(int index) {
@@ -64,13 +73,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
   }
 
   void _saveRoutine() {
-    if (_routineNameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a routine name')),
-      );
-      return;
-    }
-
     final routine = Routine(
       id: UniqueKey().toString(),
       name: _routineNameController.text,
@@ -129,11 +131,11 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: theme.colorScheme
-                                        .inversePrimary, // Usando color de superficie del tema
+                                    color: theme.colorScheme.inversePrimary,
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       RepsOrWeightEditor(
                                         value: routineExercise
@@ -181,7 +183,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _saveRoutine,
+              onPressed: _isRoutineNameEmpty ? null : _saveRoutine,
               child: Text('Save Routine'),
             ),
           ],

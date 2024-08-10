@@ -1,10 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
 class RepsOrWeightEditor extends StatelessWidget {
   final int value;
   final void Function(int) onValueChanged;
   final String label;
-  final bool isReps; // Determina si es para reps o peso
+  final bool isReps;
 
   RepsOrWeightEditor({
     required this.value,
@@ -26,22 +28,40 @@ class RepsOrWeightEditor extends StatelessWidget {
           },
         ),
         SizedBox(
-          width: 60,
-          child: TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: label,
-              border: InputBorder.none,
-              alignLabelWithHint: true, // Alinea la etiqueta con el campo
-            ),
-            onChanged: (value) {
-              final intValue = int.tryParse(value) ?? 0;
-              onValueChanged(intValue);
-            },
-            controller: TextEditingController(
-              text: value.toString(),
-            ),
-            textAlign: TextAlign.center,
+          width: 55,
+          child: Stack(
+            children: [
+              Column(children: [
+                SizedBox(height: 3),
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    alignLabelWithHint: true,
+                  ),
+                  onChanged: (value) {
+                    final intValue = int.tryParse(value) ?? 0;
+                    onValueChanged(intValue);
+                  },
+                  controller: TextEditingController(
+                    text: this.value.toString(),
+                  ),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 16), // Tamaño del texto principal
+                ),
+              ]),
+            ],
           ),
         ),
         IconButton(
