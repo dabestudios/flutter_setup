@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:setup_app/tables/Exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
@@ -80,7 +81,34 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       exercises: _editableExercises,
     );
 
+    // Guardar la rutina en la base de datos
+    _saveRoutineToDatabase(routine);
+
+    // Guardar estadísticas de ejercicios para esta rutina
+    for (var exercise in _editableExercises) {
+      final stats = ExerciseStats(
+        id: UniqueKey().toString(),
+        exerciseId: exercise.exerciseId,
+        routineId: routine.id,
+        date: DateTime.now(),
+        repetitions: exercise.repetitions,
+        weights: exercise.weights,
+      );
+      _saveExerciseStatsToDatabase(stats);
+    }
+
+    // Llamar a la función de guardado proporcionada
     widget.onSave(routine);
+  }
+
+  void _saveRoutineToDatabase(Routine routine) {
+    print(routine.toMap());
+    // Implementar la lógica para guardar la rutina en la base de datos
+  }
+
+  void _saveExerciseStatsToDatabase(ExerciseStats stats) {
+    //print(stats.toMap());
+    // Implementar la lógica para guardar las estadísticas del ejercicio en la base de datos
   }
 
   @override
