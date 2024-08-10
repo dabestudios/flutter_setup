@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
         builder: (context, theme, _) {
           return MaterialApp(
             title: 'Long Buttons App',
-            theme: FlexThemeData.light(scheme: FlexScheme.mandyRed),
-            darkTheme: FlexThemeData.dark(scheme: FlexScheme.mandyRed),
+            theme: FlexThemeData.light(scheme: FlexScheme.bigStone),
+            darkTheme: FlexThemeData.dark(scheme: FlexScheme.bigStone),
             themeMode: theme.themeMode,
             home: AuthGate(),
           );

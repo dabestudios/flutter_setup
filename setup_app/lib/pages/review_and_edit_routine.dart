@@ -83,9 +83,12 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Review and Edit Routine'),
+        backgroundColor: theme.appBarTheme.backgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -126,9 +129,9 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                               children: [
                                 Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.grey,
-                                    borderRadius: BorderRadius.circular(
-                                        10.0), // Aquí defines el radio de los bordes redondeados
+                                    color: theme.colorScheme
+                                        .inversePrimary, // Usando color de superficie del tema
+                                    borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   child: Row(
                                     children: [
@@ -154,7 +157,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete),
+                                  icon: Icon(Icons.delete,
+                                      color: theme.colorScheme.inversePrimary),
                                   onPressed: () =>
                                       _removeSeries(index, seriesIndex),
                                 ),
