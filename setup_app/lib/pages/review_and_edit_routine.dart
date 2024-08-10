@@ -118,7 +118,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                   return ExpansionTile(
                     title: Text(exercise.name),
                     subtitle: Text(
-                        '${routineExercise.repetitions.length} series, ${routineExercise.repetitions.join(", ")} reps, ${routineExercise.weights.join(", ")} kg'),
+                        '${routineExercise.repetitions.length} series of ${routineExercise.repetitions.join(", ")} reps'),
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
