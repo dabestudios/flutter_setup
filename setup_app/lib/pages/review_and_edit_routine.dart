@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:setup_app/tables/data_base_helper.dart';
 import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
@@ -85,7 +86,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     _saveRoutineToDatabase(routine);
 
     // Guardar estadísticas de ejercicios para esta rutina
-    for (var exercise in _editableExercises) {
+    /* for (var exercise in _editableExercises) {
       final stats = ExerciseStats(
         id: UniqueKey().toString(),
         exerciseId: exercise.exerciseId,
@@ -95,20 +96,24 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
         weights: exercise.weights,
       );
       _saveExerciseStatsToDatabase(stats);
-    }
+    } */
 
     // Llamar a la función de guardado proporcionada
     widget.onSave(routine);
   }
 
-  void _saveRoutineToDatabase(Routine routine) {
-    print(routine.toMap());
-    // Implementar la lógica para guardar la rutina en la base de datos
+  void _saveRoutineToDatabase(Routine routine) async {
+    final dbHelper = DatabaseHelper();
+    await dbHelper.insertRoutine(routine);
+
+    for (var exercise in _editableExercises) {
+      await dbHelper.insertRoutineExercise(exercise);
+    }
   }
 
-  void _saveExerciseStatsToDatabase(ExerciseStats stats) {
-    //print(stats.toMap());
-    // Implementar la lógica para guardar las estadísticas del ejercicio en la base de datos
+  void _saveExerciseStatsToDatabase(ExerciseStats stats) async {
+    final dbHelper = DatabaseHelper();
+    await dbHelper.insertExerciseStats(stats);
   }
 
   @override

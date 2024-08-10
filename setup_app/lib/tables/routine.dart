@@ -22,4 +22,25 @@ class Routine {
       'exercises': exercises.map((e) => e.toJson()).toList(),
     };
   }
+
+  // Método para convertir a un formato de objeto si estás obteniendo de una base de datos
+  factory Routine.fromJson(Map<String, dynamic> json) {
+    return Routine(
+      id: json['id'],
+      name: json['name'],
+      lastDate: DateTime.parse(json['lastDate']),
+      exercises: List<RoutineExercise>.from(
+          json['exercises'].map((e) => RoutineExercise.fromJson(e))),
+    );
+  }
+
+  // Método para convertir a un formato de mapa si estás guardando en una base de datos
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'lastDate': lastDate.toIso8601String(),
+      'exercises': exercises.map((e) => e.toJson()).toList(),
+    };
+  }
 }
