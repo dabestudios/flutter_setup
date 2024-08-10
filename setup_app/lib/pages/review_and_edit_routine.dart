@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:setup_app/tables/Exercise_stats.dart';
+import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
