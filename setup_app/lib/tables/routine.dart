@@ -23,8 +23,7 @@ class Routine {
     };
   }
 
-  // Método para convertir a un formato de objeto si estás obteniendo de una base de datos
-  factory Routine.fromJson(Map<String, dynamic> json) {
+  static Routine fromJson(Map<String, dynamic> json) {
     return Routine(
       id: json['id'],
       name: json['name'],
@@ -34,7 +33,7 @@ class Routine {
     );
   }
 
-  // Método para convertir a un formato de mapa si estás guardando en una base de datos
+  // Método para convertir a un formato JSON si estás guardando en un archivo
   Map<String, dynamic> toJson() {
     return {
       'id': id,

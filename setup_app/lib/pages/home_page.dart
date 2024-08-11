@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/navbar.dart';
 import 'package:setup_app/pages/new_page.dart';
-import 'package:setup_app/pages/saved_routines_page.dart';
+import 'package:setup_app/pages/routine_list_page.dart';
 
 class WorkoutApp extends StatelessWidget {
   const WorkoutApp({super.key});
@@ -49,9 +49,8 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SavedRoutinesPage()),
+                  MaterialPageRoute(builder: (context) => RoutineListPage()),
                 );
-                // Navegar a la página de empezar rutina
               },
               style: ElevatedButton.styleFrom(
                 padding:
