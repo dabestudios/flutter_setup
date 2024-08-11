@@ -1,7 +1,7 @@
 // routine_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:setup_app/tables/routine.dart';
-import 'package:setup_app/tables/routine_storage.dart';
+import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineListPage extends StatefulWidget {
   @override

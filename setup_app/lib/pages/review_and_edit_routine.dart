@@ -1,11 +1,12 @@
 // review_and_edit_page.dart
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
-import 'package:setup_app/tables/routine_storage.dart';
+import 'package:setup_app/model/routine_storage.dart';
 import 'package:setup_app/widgets/RepsOrWeightEditor.dart';
 
 class ReviewAndEditPage extends StatefulWidget {
@@ -30,7 +31,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     super.initState();
     _editableExercises = widget.selectedExercises.map((exercise) {
       return RoutineExercise(
-        routineId: '',
         exerciseId: exercise.id,
         repetitions: [10, 10, 10],
         weights: [20, 20, 20],
@@ -87,6 +87,11 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
 
     // Guardar estadísticas de ejercicios para esta rutina
     widget.onSave(routine);
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => HomePage()),
+    );
   }
 
   Future<void> _saveRoutineToDatabase(Routine routine) async {
