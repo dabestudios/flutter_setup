@@ -107,7 +107,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       final file = await routineStorage.getLocalFile();
       await file.writeAsString(jsonString);
 
-      print('Rutina guardada exitosamente');
+      //print('Rutina guardada exitosamente');
     } catch (e) {
       print("Error saving routine: $e");
     }
