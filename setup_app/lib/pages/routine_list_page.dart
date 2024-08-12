@@ -1,5 +1,6 @@
 // routine_list_page.dart
 import 'package:flutter/material.dart';
+import 'package:setup_app/pages/routine_workout_page.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
 
@@ -22,7 +23,15 @@ class _RoutineListPageState extends State<RoutineListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Saved Routines'),
+        title: const Text('My Routines'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              // Agrega una nueva rutina (implementar esta funcionalidad)
+            },
+          ),
+        ],
       ),
       body: FutureBuilder<List<Routine>>(
         future: _routinesFuture,
@@ -45,11 +54,8 @@ class _RoutineListPageState extends State<RoutineListPage> {
             itemCount: routines.length,
             itemBuilder: (context, index) {
               final routine = routines[index];
-              return ListTile(
-                title: Text(routine.name),
-                subtitle: Text('Last updated: ${routine.lastDate.toLocal()}'),
+              return GestureDetector(
                 onTap: () {
-                  // Navigate to details page
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -57,6 +63,33 @@ class _RoutineListPageState extends State<RoutineListPage> {
                     ),
                   );
                 },
+                child: Card(
+                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.all(16.0),
+                    leading: Icon(Icons.fitness_center, size: 40),
+                    title: Text(
+                      routine.name,
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    subtitle:
+                        Text('Last updated: ${routine.lastDate.toLocal()}'),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        // Navega a la pantalla de edición
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditRoutinePage(routine: routine),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
               );
             },
           );
@@ -76,6 +109,20 @@ class RoutineDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(routine.name),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              // Navega a la pantalla de edición
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => EditRoutinePage(routine: routine),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -97,17 +144,35 @@ class RoutineDetailPage extends StatelessWidget {
                 itemCount: routine.exercises.length,
                 itemBuilder: (context, index) {
                   final exercise = routine.exercises[index];
-                  return ListTile(
-                    title: Text('Exercise ID: ${exercise.exerciseId}'),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Reps: ${exercise.repetitions.join(", ")}'),
-                        Text('Weights: ${exercise.weights.join(", ")}'),
-                      ],
+                  return Card(
+                    margin: EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      title: Text('Exercise ID: ${exercise.exerciseId}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Reps: ${exercise.repetitions.join(", ")}'),
+                          Text('Weights: ${exercise.weights.join(", ")}'),
+                        ],
+                      ),
                     ),
                   );
                 },
+              ),
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navega a la página de entrenamiento de la rutina
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RoutineWorkoutPage(routine: routine),
+                    ),
+                  );
+                },
+                child: Text('Start Workout'),
               ),
             ),
           ],
@@ -116,3 +181,24 @@ class RoutineDetailPage extends StatelessWidget {
     );
   }
 }
+
+class EditRoutinePage extends StatelessWidget {
+  final Routine routine;
+
+  EditRoutinePage({required this.routine});
+
+  @override
+  Widget build(BuildContext context) {
+    // Implementar la lógica para editar la rutina
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit ${routine.name}'),
+      ),
+      body: Center(
+        child: Text('Edit Routine Page (Funcionalidad no implementada aún)'),
+      ),
+    );
+  }
+}
+
+// La siguiente página RoutineWorkoutPage será creada en la siguiente parte.
