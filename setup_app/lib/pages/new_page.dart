@@ -4,7 +4,6 @@ import 'package:setup_app/adMob/ad_helper.dart';
 import 'package:setup_app/pages/review_and_edit_routine.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/main.dart';
-import 'navbar.dart';
 
 class NewPage extends StatefulWidget {
   const NewPage({super.key});
@@ -16,14 +15,22 @@ class NewPage extends StatefulWidget {
 class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
-  bool _isLoading = true;
   List<Exercise> _selectedExercises = [];
+  bool _isLoading = true; // Estado de carga inicializado a true
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
-    _loadData();
+
+    // Comprobar si los ejercicios ya están cargados
+    if (globalExercises.isEmpty) {
+      // Si los ejercicios no están cargados, inicia el proceso de carga y muestra la espera
+      _loadData();
+    } else {
+      // Si los ejercicios ya están cargados, actualizar el estado para dejar de mostrar la espera
+      _isLoading = false;
+    }
   }
 
   Future<void> _initGoogleMobileAds() async {
@@ -54,9 +61,11 @@ class _NewPageState extends State<NewPage> {
   }
 
   Future<void> _loadData() async {
-    await loadExercises();
+    // Aquí esperamos a que se complete la carga de ejercicios
+    await loadExercises(); // Cargar los ejercicios desde la función global
     setState(() {
-      _isLoading = false;
+      _isLoading =
+          false; // Cuando los datos estén listos, dejar de mostrar la espera
     });
   }
 
@@ -71,7 +80,6 @@ class _NewPageState extends State<NewPage> {
   }
 
   void _createRoutine() {
-    // Aquí puedes implementar la navegación a una nueva página para confirmar y guardar la rutina
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -85,7 +93,6 @@ class _NewPageState extends State<NewPage> {
 
   @override
   void dispose() {
-    // Dispose the BannerAd object
     _bannerAd?.dispose();
     super.dispose();
   }
@@ -96,98 +103,98 @@ class _NewPageState extends State<NewPage> {
       appBar: AppBar(
         title: const Text('Create Routine'),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: const Text(
-              'Select Exercises',
-              style: TextStyle(fontSize: 24),
-            ),
-          ),
-          const SizedBox(height: 16.0),
-          // Mostrar indicador de carga o los ejercicios
-          if (_isLoading)
-            const CircularProgressIndicator() // Indicador de carga mientras se cargan los ejercicios
-          else if (globalExercises.isNotEmpty)
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, // Número de columnas en la cuadrícula
-                  childAspectRatio:
-                      3 / 2, // Relación de aspecto de los elementos
-                  mainAxisSpacing:
-                      10, // Espaciado entre elementos en la dirección principal
-                  crossAxisSpacing:
-                      10, // Espaciado entre elementos en la dirección transversal
+      body: _isLoading
+          ? const Center(
+              child:
+                  CircularProgressIndicator()) // Mostrar rueda de espera si está cargando
+          : Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: const Text(
+                    'Select Exercises',
+                    style: TextStyle(fontSize: 24),
+                  ),
                 ),
-                itemCount: globalExercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = globalExercises[index];
-                  final isSelected = _selectedExercises.contains(exercise);
-                  return GestureDetector(
-                    onTap: () => _toggleExerciseSelection(exercise),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? Theme.of(context)
-                                .colorScheme
-                                .primary
-                                .withOpacity(0.5)
-                            : Theme.of(context).colorScheme.background,
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(
-                          color: isSelected
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.grey,
-                          width: 2.0,
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            exercise.name,
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: isSelected
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Theme.of(context).colorScheme.onBackground,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8.0),
-                          Text(
-                            'Muscle', // Reemplaza con la lógica adecuada para los músculos primarios
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: isSelected
-                                  ? Theme.of(context).colorScheme.onPrimary
-                                  : Colors.grey,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                const SizedBox(height: 16.0),
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 3 / 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
                     ),
-                  );
-                },
-              ),
-            )
-          else
-            const Text('No Exercises Found'),
-          if (_bannerAd != null && _isAdsInitialized)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: _bannerAd!.size.width.toDouble(),
-                height: _bannerAd!.size.height.toDouble(),
-                child: AdWidget(ad: _bannerAd!),
-              ),
+                    itemCount: globalExercises.length,
+                    itemBuilder: (context, index) {
+                      final exercise = globalExercises[index];
+                      final isSelected = _selectedExercises.contains(exercise);
+                      return GestureDetector(
+                        onTap: () => _toggleExerciseSelection(exercise),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Theme.of(context)
+                                    .colorScheme
+                                    .primary
+                                    .withOpacity(0.5)
+                                : Theme.of(context).colorScheme.background,
+                            borderRadius: BorderRadius.circular(10.0),
+                            border: Border.all(
+                              color: isSelected
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.grey,
+                              width: 2.0,
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                exercise.name,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Theme.of(context)
+                                          .colorScheme
+                                          .onBackground,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                exercise.primaryMuscles.isNotEmpty
+                                    ? exercise.primaryMuscles.join(', ')
+                                    : 'No muscles info',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: isSelected
+                                      ? Theme.of(context).colorScheme.onPrimary
+                                      : Colors.grey,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                if (_bannerAd != null && _isAdsInitialized)
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: _bannerAd!.size.width.toDouble(),
+                      height: _bannerAd!.size.height.toDouble(),
+                      child: AdWidget(ad: _bannerAd!),
+                    ),
+                  ),
+              ],
             ),
-        ],
-      ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

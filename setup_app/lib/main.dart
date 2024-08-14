@@ -17,7 +17,7 @@ void main() async {
     name: 'dabestudios-set-up',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await loadExercises();
   runApp(MyApp());
 }
 

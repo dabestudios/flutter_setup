@@ -1,8 +1,10 @@
-// routine_list_page.dart
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
+import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
+import 'package:setup_app/main.dart';
+import 'package:setup_app/tables/routine_exercise.dart'; // Asegúrate de que globalExercises esté accesible
 
 class RoutineListPage extends StatefulWidget {
   @override
@@ -99,25 +101,38 @@ class _RoutineListPageState extends State<RoutineListPage> {
   }
 }
 
-class RoutineDetailPage extends StatelessWidget {
+class RoutineDetailPage extends StatefulWidget {
   final Routine routine;
 
   RoutineDetailPage({required this.routine});
 
   @override
+  _RoutineDetailPageState createState() => _RoutineDetailPageState();
+}
+
+class _RoutineDetailPageState extends State<RoutineDetailPage> {
+  late List<RoutineExercise> _exercises;
+
+  @override
+  void initState() {
+    super.initState();
+    _exercises = widget.routine.exercises;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(routine.name),
+        title: Text(widget.routine.name),
         actions: [
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              // Navega a la pantalla de edición
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => EditRoutinePage(routine: routine),
+                  builder: (context) =>
+                      EditRoutinePage(routine: widget.routine),
                 ),
               );
             },
@@ -130,7 +145,7 @@ class RoutineDetailPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Last updated: ${routine.lastDate.toLocal()}',
+              'Last updated: ${widget.routine.lastDate.toLocal()}',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -141,24 +156,30 @@ class RoutineDetailPage extends StatelessWidget {
             const SizedBox(height: 10),
             Expanded(
               child: ListView.builder(
-                itemCount: routine.exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = routine.exercises[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      title: Text('Exercise ID: ${exercise.exerciseId}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Reps: ${exercise.repetitions.join(", ")}'),
-                          Text('Weights: ${exercise.weights.join(", ")}'),
-                        ],
+                  itemCount: widget.routine.exercises.length,
+                  itemBuilder: (context, index) {
+                    final exercise = widget.routine.exercises[index];
+                    return Card(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      child: ListTile(
+                        title: Text('Exercise ID: ${exercise.exerciseId}'),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Reps: ${exercise.repetitions.join(", ")}'),
+                            Text('Weights: ${exercise.weights.join(", ")}'),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: Icon(Icons.info_outline),
+                          onPressed: () {
+                            showExerciseInfo(
+                                context, _exercises[index].exerciseId);
+                          },
+                        ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  }),
             ),
             Center(
               child: ElevatedButton(
@@ -168,7 +189,7 @@ class RoutineDetailPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          RoutineWorkoutPage(routine: routine),
+                          RoutineWorkoutPage(routine: widget.routine),
                     ),
                   );
                 },
@@ -178,6 +199,60 @@ class RoutineDetailPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void showExerciseInfo(BuildContext context, String exerciseId) {
+    print('Showing exercise info for $exerciseId');
+    if (globalExercises.isEmpty) {
+      print(
+          'Error: globalExercises está vacío. Asegúrate de que se haya cargado correctamente.');
+      return;
+    }
+    Exercise exercise =
+        globalExercises.firstWhere((exercise) => exercise.id == exerciseId);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(exercise.name),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Force: ${exercise.force ?? "N/A"}'),
+              Text('Level: ${exercise.level}'),
+              Text('Mechanic: ${exercise.mechanic ?? "N/A"}'),
+              Text('Equipment: ${exercise.equipment ?? "N/A"}'),
+              Text('Primary Muscles: ${exercise.primaryMuscles.join(", ")}'),
+              Text(
+                  'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
+              Text('Category: ${exercise.category}'),
+              const SizedBox(height: 10),
+              Text(
+                'Instructions:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              for (var instruction in exercise.instructions)
+                Text('- $instruction'),
+              const SizedBox(height: 10),
+              Text(
+                'Images:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              for (var image in exercise.images) Text('- $image'),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text('Close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -200,5 +275,3 @@ class EditRoutinePage extends StatelessWidget {
     );
   }
 }
-
-// La siguiente página RoutineWorkoutPage será creada en la siguiente parte.
