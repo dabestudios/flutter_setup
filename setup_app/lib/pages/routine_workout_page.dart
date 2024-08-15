@@ -1,6 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:setup_app/model/exercise_service.dart';
-import 'package:setup_app/pages/routine_detail_page.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 
@@ -16,10 +17,15 @@ class RoutineWorkoutPage extends StatefulWidget {
 class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   late List<RoutineExercise> _editableExercises;
   final ExerciseService _exerciseService = ExerciseService();
+  int _hours = 0;
+  int _minutes = 0;
+  int _seconds = 0;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
+    _startTimer();
     _editableExercises = widget.routine.exercises
         .map((exercise) => RoutineExercise(
             exerciseId: exercise.exerciseId,
@@ -30,6 +36,24 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
             isCompleted: List<bool>.filled(exercise.repetitions.length, false,
                 growable: true))) // Permite redimensionar
         .toList();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_seconds < 59) {
+          _seconds++;
+        } else {
+          _seconds = 0;
+          if (_minutes < 59) {
+            _minutes++;
+          } else {
+            _minutes = 0;
+            _hours++;
+          }
+        }
+      });
+    });
   }
 
   void _toggleCompletion(int exerciseIndex, int seriesIndex) {
@@ -68,6 +92,12 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
 
   void _finishWorkout() {
     Navigator.pop(context);
+  }
+
+  void _stopTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+    }
   }
 
   @override
@@ -162,6 +192,32 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
             ],
           );
         },
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).appBarTheme.backgroundColor,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: Text(
+                '${_hours.toString().padLeft(2, '0')}:${_minutes.toString().padLeft(2, '0')}:${_seconds.toString().padLeft(2, '0')}',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Theme.of(context).appBarTheme.foregroundColor,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).appBarTheme.foregroundColor,
+                foregroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              ),
+              onPressed: _finishWorkout,
+              child: Text('Finished'),
+            ),
+          ],
+        ),
       ),
     );
   }
