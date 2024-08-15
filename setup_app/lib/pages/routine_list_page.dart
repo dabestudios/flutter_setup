@@ -1,7 +1,9 @@
-// routine_list_page.dart
 import 'package:flutter/material.dart';
+import 'package:setup_app/pages/routine_detail_page.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
+import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
+import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineListPage extends StatefulWidget {
@@ -10,6 +12,7 @@ class RoutineListPage extends StatefulWidget {
 }
 
 class _RoutineListPageState extends State<RoutineListPage> {
+  // Usar la instancia singleton de RoutineStorage
   final RoutineStorage _routineStorage = RoutineStorage();
   late Future<List<Routine>> _routinesFuture;
 
@@ -79,13 +82,6 @@ class _RoutineListPageState extends State<RoutineListPage> {
                       icon: Icon(Icons.edit),
                       onPressed: () {
                         // Navega a la pantalla de edición
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EditRoutinePage(routine: routine),
-                          ),
-                        );
                       },
                     ),
                   ),
@@ -98,107 +94,3 @@ class _RoutineListPageState extends State<RoutineListPage> {
     );
   }
 }
-
-class RoutineDetailPage extends StatelessWidget {
-  final Routine routine;
-
-  RoutineDetailPage({required this.routine});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(routine.name),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // Navega a la pantalla de edición
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditRoutinePage(routine: routine),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Last updated: ${routine.lastDate.toLocal()}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              'Exercises:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: routine.exercises.length,
-                itemBuilder: (context, index) {
-                  final exercise = routine.exercises[index];
-                  return Card(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListTile(
-                      title: Text('Exercise ID: ${exercise.exerciseId}'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Reps: ${exercise.repetitions.join(", ")}'),
-                          Text('Weights: ${exercise.weights.join(", ")}'),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navega a la página de entrenamiento de la rutina
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          RoutineWorkoutPage(routine: routine),
-                    ),
-                  );
-                },
-                child: Text('Start Workout'),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class EditRoutinePage extends StatelessWidget {
-  final Routine routine;
-
-  EditRoutinePage({required this.routine});
-
-  @override
-  Widget build(BuildContext context) {
-    // Implementar la lógica para editar la rutina
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Edit ${routine.name}'),
-      ),
-      body: Center(
-        child: Text('Edit Routine Page (Funcionalidad no implementada aún)'),
-      ),
-    );
-  }
-}
-
-// La siguiente página RoutineWorkoutPage será creada en la siguiente parte.

@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import 'package:setup_app/main.dart';
 
 class Exercise {
   final String id;
@@ -44,31 +43,34 @@ class Exercise {
       images: List<String>.from(json['images']),
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'force': force,
-      'level': level,
-      'mechanic': mechanic,
-      'equipment': equipment,
-      'primaryMuscles': primaryMuscles,
-      'secondaryMuscles': secondaryMuscles,
-      'instructions': instructions,
-      'category': category,
-      'images': images,
-    };
-  }
 }
 
-Future<void> loadExercises() async {
-  try {
+class ExerciseLoader {
+  static final ExerciseLoader _instance = ExerciseLoader._internal();
+  List<Exercise>? _exercises;
+
+  factory ExerciseLoader() {
+    return _instance;
+  }
+
+  ExerciseLoader._internal();
+
+  Future<void> _loadExercises() async {
     final String response =
         await rootBundle.loadString('assets/exercises.json');
     final List<dynamic> data = json.decode(response);
-    globalExercises = data.map((json) => Exercise.fromJson(json)).toList();
-  } catch (error) {
-    print("Error loading exercises: $error");
+    _exercises = data.map((json) => Exercise.fromJson(json)).toList();
+  }
+
+  Future<List<Exercise>> getExercises() async {
+    if (_exercises == null) {
+      await _loadExercises();
+    }
+    return _exercises!;
+  }
+
+  Future<Exercise?> getExerciseById(String id) async {
+    final exercises = await getExercises();
+    return exercises.firstWhere((exercise) => exercise.id == id);
   }
 }

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/pages/new_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
 import 'package:setup_app/pages/your_profile.dart';
@@ -43,7 +44,7 @@ class NavBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const NewPage()),
+                MaterialPageRoute(builder: (context) => HomePage()),
               );
             },
           ),
