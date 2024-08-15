@@ -4,7 +4,6 @@ import 'package:firebase_ui_oauth_google/firebase_ui_oauth_google.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/main.dart';
 import 'package:setup_app/pages/home_page.dart';
-import 'package:setup_app/pages/new_page.dart';
 
 class AuthGate extends StatelessWidget {
   const AuthGate({super.key});

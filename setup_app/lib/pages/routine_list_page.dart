@@ -3,7 +3,6 @@ import 'package:setup_app/pages/routine_workout_page.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
-import 'package:setup_app/main.dart';
 import 'package:setup_app/tables/routine_exercise.dart'; // Asegúrate de que globalExercises esté accesible
 
 class RoutineListPage extends StatefulWidget {
@@ -112,6 +111,7 @@ class RoutineDetailPage extends StatefulWidget {
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
   late List<RoutineExercise> _exercises;
+  final ExerciseLoader _exerciseLoader = ExerciseLoader();
 
   @override
   void initState() {
@@ -202,15 +202,14 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     );
   }
 
-  void showExerciseInfo(BuildContext context, String exerciseId) {
-    print('Showing exercise info for $exerciseId');
-    if (globalExercises.isEmpty) {
-      print(
-          'Error: globalExercises está vacío. Asegúrate de que se haya cargado correctamente.');
+  void showExerciseInfo(BuildContext context, String exerciseId) async {
+    Exercise? exercise = await _exerciseLoader.getExerciseById(exerciseId);
+
+    if (exercise == null) {
+      print('Error: Exercise not found for ID $exerciseId');
       return;
     }
-    Exercise exercise =
-        globalExercises.firstWhere((exercise) => exercise.id == exerciseId);
+
     showDialog(
       context: context,
       builder: (BuildContext context) {

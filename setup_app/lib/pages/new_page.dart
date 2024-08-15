@@ -3,7 +3,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
 import 'package:setup_app/pages/review_and_edit_routine.dart';
 import 'package:setup_app/tables/exercise.dart';
-import 'package:setup_app/main.dart';
 
 class NewPage extends StatefulWidget {
   const NewPage({super.key});
@@ -16,21 +15,15 @@ class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
   List<Exercise> _selectedExercises = [];
+  List<Exercise> _exercises = [];
   bool _isLoading = true; // Estado de carga inicializado a true
+  final ExerciseLoader _exerciseLoader = ExerciseLoader();
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
-
-    // Comprobar si los ejercicios ya están cargados
-    if (globalExercises.isEmpty) {
-      // Si los ejercicios no están cargados, inicia el proceso de carga y muestra la espera
-      _loadData();
-    } else {
-      // Si los ejercicios ya están cargados, actualizar el estado para dejar de mostrar la espera
-      _isLoading = false;
-    }
+    _loadData(); // Iniciar la carga de los ejercicios
   }
 
   Future<void> _initGoogleMobileAds() async {
@@ -61,9 +54,10 @@ class _NewPageState extends State<NewPage> {
   }
 
   Future<void> _loadData() async {
-    // Aquí esperamos a que se complete la carga de ejercicios
-    await loadExercises(); // Cargar los ejercicios desde la función global
+    // Cargar los ejercicios usando el singleton ExerciseLoader
+    final exercises = await _exerciseLoader.getExercises();
     setState(() {
+      _exercises = exercises;
       _isLoading =
           false; // Cuando los datos estén listos, dejar de mostrar la espera
     });
@@ -81,14 +75,16 @@ class _NewPageState extends State<NewPage> {
 
   void _createRoutine() {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ReviewAndEditPage(
-                  selectedExercises: _selectedExercises,
-                  onSave: (routine) {
-                    // Implementa la lógica para guardar la rutina en la base de datos
-                  },
-                )));
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReviewAndEditPage(
+          selectedExercises: _selectedExercises,
+          onSave: (routine) {
+            // Implementa la lógica para guardar la rutina en la base de datos
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -106,7 +102,8 @@ class _NewPageState extends State<NewPage> {
       body: _isLoading
           ? const Center(
               child:
-                  CircularProgressIndicator()) // Mostrar rueda de espera si está cargando
+                  CircularProgressIndicator(), // Mostrar rueda de espera si está cargando
+            )
           : Column(
               children: [
                 Padding(
@@ -126,9 +123,9 @@ class _NewPageState extends State<NewPage> {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: globalExercises.length,
+                    itemCount: _exercises.length,
                     itemBuilder: (context, index) {
-                      final exercise = globalExercises[index];
+                      final exercise = _exercises[index];
                       final isSelected = _selectedExercises.contains(exercise);
                       return GestureDetector(
                         onTap: () => _toggleExerciseSelection(exercise),
