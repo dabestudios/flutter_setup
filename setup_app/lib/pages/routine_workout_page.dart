@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:setup_app/model/exercise_service.dart';
+import 'package:setup_app/pages/routine_detail_page.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 
@@ -13,6 +15,7 @@ class RoutineWorkoutPage extends StatefulWidget {
 
 class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   late List<RoutineExercise> _editableExercises;
+  final ExerciseService _exerciseService = ExerciseService();
 
   @override
   void initState() {
@@ -36,11 +39,15 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     });
   }
 
-   void _addSeries(int exerciseIndex) {
+  void _addSeries(int exerciseIndex) {
     setState(() {
-      _editableExercises[exerciseIndex].repetitions.add(0); // Nueva serie con 0 reps
+      _editableExercises[exerciseIndex]
+          .repetitions
+          .add(0); // Nueva serie con 0 reps
       _editableExercises[exerciseIndex].weights.add(0); // Nueva serie con 0 kg
-      _editableExercises[exerciseIndex].isCompleted.add(false); // Nueva serie no completada
+      _editableExercises[exerciseIndex]
+          .isCompleted
+          .add(false); // Nueva serie no completada
     });
     print(_editableExercises);
   }
@@ -100,6 +107,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           _removeExercise(index);
                         } else if (value == 'remove_serie') {
                           _removeSeries(index, 0);
+                        } else if (value == 'info') {
+                          _exerciseService.showExerciseInfo(
+                              context, exercise.exerciseId);
                         }
                       },
                       itemBuilder: (BuildContext context) =>
@@ -115,6 +125,10 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                         PopupMenuItem<String>(
                           value: 'remove_serie',
                           child: Text('Remove Serie'),
+                        ),
+                        PopupMenuItem<String>(
+                          value: 'info',
+                          child: Text('Info'),
                         ),
                       ],
                     ),
