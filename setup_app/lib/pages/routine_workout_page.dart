@@ -29,12 +29,10 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     _editableExercises = widget.routine.exercises
         .map((exercise) => RoutineExercise(
             exerciseId: exercise.exerciseId,
-            repetitions: List<int>.from(exercise.repetitions,
-                growable: true), // Permite redimensionar
-            weights: List<int>.from(exercise.weights,
-                growable: true), // Permite redimensionar
+            repetitions: List<int>.from(exercise.repetitions, growable: true),
+            weights: List<int>.from(exercise.weights, growable: true),
             isCompleted: List<bool>.filled(exercise.repetitions.length, false,
-                growable: true))) // Permite redimensionar
+                growable: true)))
         .toList();
   }
 
@@ -65,15 +63,10 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
 
   void _addSeries(int exerciseIndex) {
     setState(() {
-      _editableExercises[exerciseIndex]
-          .repetitions
-          .add(0); // Nueva serie con 0 reps
-      _editableExercises[exerciseIndex].weights.add(0); // Nueva serie con 0 kg
-      _editableExercises[exerciseIndex]
-          .isCompleted
-          .add(false); // Nueva serie no completada
+      _editableExercises[exerciseIndex].repetitions.add(0);
+      _editableExercises[exerciseIndex].weights.add(0);
+      _editableExercises[exerciseIndex].isCompleted.add(false);
     });
-    print(_editableExercises);
   }
 
   void _removeSeries(int exerciseIndex, int seriesIndex) {
@@ -176,8 +169,38 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                   exercise.repetitions.length,
                   (seriesIndex) => DataRow(cells: [
                     DataCell(Text('Serie ${seriesIndex + 1}')),
-                    DataCell(Text('${exercise.weights[seriesIndex]}')),
-                    DataCell(Text('${exercise.repetitions[seriesIndex]}')),
+                    DataCell(
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration.collapsed(hintText: null),
+                        onChanged: (value) {
+                          setState(() {
+                            exercise.weights[seriesIndex] =
+                                int.tryParse(value) ??
+                                    exercise.weights[seriesIndex];
+                          });
+                        },
+                        controller: TextEditingController(
+                            text: '${exercise.weights[seriesIndex]}'),
+                      ),
+                    ),
+                    DataCell(
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration.collapsed(hintText: null),
+                        onChanged: (value) {
+                          setState(() {
+                            exercise.repetitions[seriesIndex] =
+                                int.tryParse(value) ??
+                                    exercise.repetitions[seriesIndex];
+                          });
+                        },
+                        controller: TextEditingController(
+                            text: '${exercise.repetitions[seriesIndex]}'),
+                      ),
+                    ),
                     DataCell(
                       Checkbox(
                         value: exercise.isCompleted[seriesIndex],
