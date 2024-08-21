@@ -117,7 +117,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -232,11 +231,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                               height: 48.0, // Altura consistente
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.all(8.0),
-                              child: Text('Serie ${seriesIndex + 1}',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    shadows: [], // Elimina la sombra del texto
-                                  )),
+                              child: Text(
+                                'Serie ${seriesIndex + 1}',
+                              ),
                             ),
                           ),
                           TableCell(
@@ -244,6 +241,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                               height: 48.0, // Altura consistente
                               padding: const EdgeInsets.all(8.0),
                               child: TextField(
+                                textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 onChanged: (value) {
                                   setState(() {
@@ -266,6 +264,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                               height: 48.0, // Altura consistente
                               padding: const EdgeInsets.all(8.0),
                               child: TextField(
+                                textAlign: TextAlign.center,
                                 keyboardType: TextInputType.number,
                                 onChanged: (value) {
                                   setState(() {
@@ -321,13 +320,13 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 ),
               ),
             ),
-            IconButton(
-              icon: Icon(Icons.stop),
-              color: Colors.red,
-              onPressed: () {
-                _stopTimer();
-                _finishWorkout();
-              },
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).appBarTheme.foregroundColor,
+                foregroundColor: Theme.of(context).appBarTheme.backgroundColor,
+              ),
+              onPressed: _finishWorkout,
+              child: Text('Finished'),
             ),
           ],
         ),
