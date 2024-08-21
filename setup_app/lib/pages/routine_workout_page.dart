@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class RoutineWorkoutPage extends StatefulWidget {
   final Routine routine;
@@ -21,6 +21,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   int _minutes = 0;
   int _seconds = 0;
   late Timer _timer;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -54,11 +55,16 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     });
   }
 
-  void _toggleCompletion(int exerciseIndex, int seriesIndex) {
+  void _toggleCompletion(int exerciseIndex, int seriesIndex) async {
     setState(() {
       _editableExercises[exerciseIndex].isCompleted[seriesIndex] =
           !_editableExercises[exerciseIndex].isCompleted[seriesIndex];
     });
+
+    // Reproduce el sonido solo si se marca como completado
+    if (_editableExercises[exerciseIndex].isCompleted[seriesIndex]) {
+      await _audioPlayer.play(AssetSource('sounds/victory.mp3'));
+    }
   }
 
   void _addSeries(int exerciseIndex) {
@@ -159,7 +165,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 ),
               ),
               DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text('Serie')),
                   DataColumn(label: Text('Kg')),
                   DataColumn(label: Text('Reps')),
@@ -167,51 +173,77 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 ],
                 rows: List<DataRow>.generate(
                   exercise.repetitions.length,
-                  (seriesIndex) => DataRow(cells: [
-                    DataCell(Text('Serie ${seriesIndex + 1}')),
-                    DataCell(
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration.collapsed(hintText: null),
-                        onChanged: (value) {
-                          setState(() {
-                            exercise.weights[seriesIndex] =
-                                int.tryParse(value) ??
-                                    exercise.weights[seriesIndex];
-                          });
-                        },
-                        controller: TextEditingController(
-                            text: '${exercise.weights[seriesIndex]}'),
-                      ),
+                  (seriesIndex) => DataRow(
+                    color: MaterialStateProperty.resolveWith<Color?>(
+                      (Set<MaterialState> states) {
+                        if (exercise.isCompleted[seriesIndex]) {
+                          return Colors.greenAccent;
+                        }
+                        return null;
+                      },
                     ),
-                    DataCell(
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration.collapsed(hintText: null),
-                        onChanged: (value) {
-                          setState(() {
-                            exercise.repetitions[seriesIndex] =
-                                int.tryParse(value) ??
-                                    exercise.repetitions[seriesIndex];
-                          });
-                        },
-                        controller: TextEditingController(
-                            text: '${exercise.repetitions[seriesIndex]}'),
+                    cells: [
+                      DataCell(
+                        Container(
+                          //width: MediaQuery.of(context).size.width *0.25, // Ajusta el ancho relativo de la celda
+                          child: Text('Serie ${seriesIndex + 1}'),
+                        ),
                       ),
-                    ),
-                    DataCell(
-                      Checkbox(
-                        value: exercise.isCompleted[seriesIndex],
-                        onChanged: (value) {
-                          _toggleCompletion(index, seriesIndex);
-                        },
+                      DataCell(
+                        Container(
+                          //width: MediaQuery.of(context).size.width * 0.25,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            decoration:
+                                InputDecoration.collapsed(hintText: null),
+                            onChanged: (value) {
+                              setState(() {
+                                exercise.weights[seriesIndex] =
+                                    int.tryParse(value) ??
+                                        exercise.weights[seriesIndex];
+                              });
+                            },
+                            controller: TextEditingController(
+                                text: '${exercise.weights[seriesIndex]}'),
+                          ),
+                        ),
                       ),
-                    ),
-                  ]),
+                      DataCell(
+                        Container(
+                          //width: MediaQuery.of(context).size.width * 0.25,
+                          child: TextField(
+                            keyboardType: TextInputType.number,
+                            textAlign: TextAlign.center,
+                            decoration:
+                                InputDecoration.collapsed(hintText: null),
+                            onChanged: (value) {
+                              setState(() {
+                                exercise.repetitions[seriesIndex] =
+                                    int.tryParse(value) ??
+                                        exercise.repetitions[seriesIndex];
+                              });
+                            },
+                            controller: TextEditingController(
+                                text: '${exercise.repetitions[seriesIndex]}'),
+                          ),
+                        ),
+                      ),
+                      DataCell(
+                        Container(
+                          //width: MediaQuery.of(context).size.width * 0.25,
+                          child: Checkbox(
+                            value: exercise.isCompleted[seriesIndex],
+                            onChanged: (value) {
+                              _toggleCompletion(index, seriesIndex);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+              )
             ],
           );
         },
