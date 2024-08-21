@@ -164,39 +164,72 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                   ],
                 ),
               ),
-              DataTable(
-                columns: const [
-                  DataColumn(label: Text('Serie')),
-                  DataColumn(label: Text('Kg')),
-                  DataColumn(label: Text('Reps')),
-                  DataColumn(label: Text('Confirm')),
-                ],
-                rows: List<DataRow>.generate(
-                  exercise.repetitions.length,
-                  (seriesIndex) => DataRow(
-                    color: MaterialStateProperty.resolveWith<Color?>(
-                      (Set<MaterialState> states) {
-                        if (exercise.isCompleted[seriesIndex]) {
-                          return Colors.greenAccent;
-                        }
-                        return null;
-                      },
+              Table(
+                columnWidths: {
+                  0: FlexColumnWidth(2),
+                  1: FlexColumnWidth(2),
+                  2: FlexColumnWidth(2),
+                  3: FlexColumnWidth(2),
+                },
+                children: [
+                  TableRow(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).appBarTheme.backgroundColor,
                     ),
-                    cells: [
-                      DataCell(
-                        Container(
-                          //width: MediaQuery.of(context).size.width *0.25, // Ajusta el ancho relativo de la celda
-                          child: Text('Serie ${seriesIndex + 1}'),
-                        ),
+                    children: const [
+                      TableCell(
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Serie',
+                              style: TextStyle(color: Colors.white),
+                            )),
                       ),
-                      DataCell(
-                        Container(
-                          //width: MediaQuery.of(context).size.width * 0.25,
+                      TableCell(
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Kg',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ),
+                      TableCell(
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Reps',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ),
+                      TableCell(
+                        child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(color: Colors.white),
+                            )),
+                      ),
+                    ],
+                  ),
+                  ...List<TableRow>.generate(
+                    exercise.repetitions.length,
+                    (seriesIndex) => TableRow(
+                      decoration: BoxDecoration(
+                        color: exercise.isCompleted[seriesIndex]
+                            ? Colors.greenAccent
+                            : null,
+                      ),
+                      children: [
+                        TableCell(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Serie ${seriesIndex + 1}'),
+                        )),
+                        TableCell(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            decoration:
-                                InputDecoration.collapsed(hintText: null),
                             onChanged: (value) {
                               setState(() {
                                 exercise.weights[seriesIndex] =
@@ -207,16 +240,12 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                             controller: TextEditingController(
                                 text: '${exercise.weights[seriesIndex]}'),
                           ),
-                        ),
-                      ),
-                      DataCell(
-                        Container(
-                          //width: MediaQuery.of(context).size.width * 0.25,
+                        )),
+                        TableCell(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: TextField(
                             keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            decoration:
-                                InputDecoration.collapsed(hintText: null),
                             onChanged: (value) {
                               setState(() {
                                 exercise.repetitions[seriesIndex] =
@@ -227,23 +256,22 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                             controller: TextEditingController(
                                 text: '${exercise.repetitions[seriesIndex]}'),
                           ),
-                        ),
-                      ),
-                      DataCell(
-                        Container(
-                          //width: MediaQuery.of(context).size.width * 0.25,
+                        )),
+                        TableCell(
+                            child: Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Checkbox(
                             value: exercise.isCompleted[seriesIndex],
                             onChanged: (value) {
                               _toggleCompletion(index, seriesIndex);
                             },
                           ),
-                        ),
-                      ),
-                    ],
+                        )),
+                      ],
+                    ),
                   ),
-                ),
-              )
+                ],
+              ),
             ],
           );
         },
