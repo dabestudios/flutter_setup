@@ -61,7 +61,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
           !_editableExercises[exerciseIndex].isCompleted[seriesIndex];
     });
 
-    // Reproduce el sonido solo si se marca como completado
     if (_editableExercises[exerciseIndex].isCompleted[seriesIndex]) {
       await _audioPlayer.play(AssetSource('sounds/victory.mp3'));
     }
@@ -115,12 +114,12 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
         itemCount: _editableExercises.length,
         itemBuilder: (context, index) {
           final exercise = _editableExercises[index];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -163,116 +162,147 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                     ),
                   ],
                 ),
-              ),
-              Table(
-                columnWidths: {
-                  0: FlexColumnWidth(2),
-                  1: FlexColumnWidth(2),
-                  2: FlexColumnWidth(2),
-                  3: FlexColumnWidth(2),
-                },
-                children: [
-                  TableRow(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).appBarTheme.backgroundColor,
-                    ),
-                    children: const [
-                      TableCell(
-                        child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Serie',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ),
-                      TableCell(
-                        child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Kg',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ),
-                      TableCell(
-                        child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Reps',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ),
-                      TableCell(
-                        child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Confirm',
-                              style: TextStyle(color: Colors.white),
-                            )),
-                      ),
-                    ],
-                  ),
-                  ...List<TableRow>.generate(
-                    exercise.repetitions.length,
-                    (seriesIndex) => TableRow(
+                SizedBox(height: 8.0),
+                Table(
+                  columnWidths: {
+                    0: FlexColumnWidth(2),
+                    1: FlexColumnWidth(2),
+                    2: FlexColumnWidth(2),
+                    3: FlexColumnWidth(2),
+                  },
+                  children: [
+                    TableRow(
                       decoration: BoxDecoration(
-                        color: exercise.isCompleted[seriesIndex]
-                            ? Colors.greenAccent
-                            : null,
+                        color: Theme.of(context).appBarTheme.backgroundColor,
                       ),
                       children: [
                         TableCell(
-                            child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('Serie ${seriesIndex + 1}'),
-                        )),
-                        TableCell(
-                            child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                exercise.weights[seriesIndex] =
-                                    int.tryParse(value) ??
-                                        exercise.weights[seriesIndex];
-                              });
-                            },
-                            controller: TextEditingController(
-                                text: '${exercise.weights[seriesIndex]}'),
+                          child: Container(
+                            alignment: Alignment.centerLeft,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Serie',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        )),
+                        ),
                         TableCell(
-                            child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                exercise.repetitions[seriesIndex] =
-                                    int.tryParse(value) ??
-                                        exercise.repetitions[seriesIndex];
-                              });
-                            },
-                            controller: TextEditingController(
-                                text: '${exercise.repetitions[seriesIndex]}'),
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Kg',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        )),
+                        ),
                         TableCell(
-                            child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Checkbox(
-                            value: exercise.isCompleted[seriesIndex],
-                            onChanged: (value) {
-                              _toggleCompletion(index, seriesIndex);
-                            },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Reps',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        )),
+                        ),
+                        TableCell(
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              'Confirm',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                ],
-              ),
-            ],
+                    ...List<TableRow>.generate(
+                      exercise.repetitions.length,
+                      (seriesIndex) => TableRow(
+                        decoration: BoxDecoration(
+                          color: exercise.isCompleted[seriesIndex]
+                              ? Colors.greenAccent
+                              : null,
+                        ),
+                        children: [
+                          TableCell(
+                            child: Container(
+                              height: 48.0, // Altura consistente
+                              alignment: Alignment.centerLeft,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text('Serie ${seriesIndex + 1}',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    shadows: [], // Elimina la sombra del texto
+                                  )),
+                            ),
+                          ),
+                          TableCell(
+                            child: Container(
+                              height: 48.0, // Altura consistente
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    exercise.weights[seriesIndex] =
+                                        int.tryParse(value) ??
+                                            exercise.weights[seriesIndex];
+                                  });
+                                },
+                                controller: TextEditingController(
+                                    text: '${exercise.weights[seriesIndex]}'),
+                                decoration: InputDecoration(
+                                  border: InputBorder
+                                      .none, // Elimina la línea debajo del campo
+                                ),
+                              ),
+                            ),
+                          ),
+                          TableCell(
+                            child: Container(
+                              height: 48.0, // Altura consistente
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                onChanged: (value) {
+                                  setState(() {
+                                    exercise.repetitions[seriesIndex] =
+                                        int.tryParse(value) ??
+                                            exercise.repetitions[seriesIndex];
+                                  });
+                                },
+                                controller: TextEditingController(
+                                    text:
+                                        '${exercise.repetitions[seriesIndex]}'),
+                                decoration: InputDecoration(
+                                  border: InputBorder
+                                      .none, // Elimina la línea debajo del campo
+                                ),
+                              ),
+                            ),
+                          ),
+                          TableCell(
+                            child: Container(
+                              height: 48.0, // Altura consistente
+                              padding: const EdgeInsets.all(8.0),
+                              child: Checkbox(
+                                value: exercise.isCompleted[seriesIndex],
+                                onChanged: (value) {
+                                  _toggleCompletion(index, seriesIndex);
+                                },
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         },
       ),
@@ -282,7 +312,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Text(
                 '${_hours.toString().padLeft(2, '0')}:${_minutes.toString().padLeft(2, '0')}:${_seconds.toString().padLeft(2, '0')}',
                 style: TextStyle(
@@ -291,13 +321,13 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 ),
               ),
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).appBarTheme.foregroundColor,
-                foregroundColor: Theme.of(context).appBarTheme.backgroundColor,
-              ),
-              onPressed: _finishWorkout,
-              child: Text('Finished'),
+            IconButton(
+              icon: Icon(Icons.stop),
+              color: Colors.red,
+              onPressed: () {
+                _stopTimer();
+                _finishWorkout();
+              },
             ),
           ],
         ),
