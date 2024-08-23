@@ -37,7 +37,10 @@ class ExerciseService {
                 Text('- $instruction'),
               const SizedBox(height: 10),
               Text('Images:', style: TextStyle(fontWeight: FontWeight.bold)),
-              for (var image in exercise.images) Text('- $image'),
+              if (exercise.images != null)
+                Image.asset('assets/photos/${exercise.images}')
+              else
+                Text('No images available'),
             ],
           ),
           actions: [
