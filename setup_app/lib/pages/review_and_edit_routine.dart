@@ -119,10 +119,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     }
   }
 
-  void _saveExerciseStatsToDatabase(ExerciseStats stats) {
-    // Implementar la lógica para guardar las estadísticas del ejercicio en la base de datos
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

@@ -2,9 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
-import 'package:setup_app/pages/new_page.dart';
-import 'package:setup_app/pages/routine_statistics_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
+import 'package:setup_app/pages/statistics_page.dart';
 import 'package:setup_app/pages/your_profile.dart';
 
 class NavBar extends StatelessWidget {
@@ -55,8 +54,7 @@ class NavBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => RoutineStatisticsPage()),
+                MaterialPageRoute(builder: (context) => StatisticsPage()),
               );
             },
           ),
