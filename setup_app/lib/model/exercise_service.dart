@@ -18,30 +18,32 @@ class ExerciseService {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(exercise.name),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Force: ${exercise.force ?? "N/A"}'),
-              Text('Level: ${exercise.level}'),
-              Text('Mechanic: ${exercise.mechanic ?? "N/A"}'),
-              Text('Equipment: ${exercise.equipment ?? "N/A"}'),
-              Text('Primary Muscles: ${exercise.primaryMuscles.join(", ")}'),
-              Text(
-                  'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
-              Text('Category: ${exercise.category}'),
-              const SizedBox(height: 10),
-              Text('Instructions:',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              for (var instruction in exercise.instructions)
-                Text('- $instruction'),
-              const SizedBox(height: 10),
-              Text('Images:', style: TextStyle(fontWeight: FontWeight.bold)),
-              if (exercise.images != null)
-                Image.asset('assets/photos/${exercise.images}')
-              else
-                Text('No images available'),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Force: ${exercise.force ?? "N/A"}'),
+                Text('Level: ${exercise.level}'),
+                Text('Mechanic: ${exercise.mechanic ?? "N/A"}'),
+                Text('Equipment: ${exercise.equipment ?? "N/A"}'),
+                Text('Primary Muscles: ${exercise.primaryMuscles.join(", ")}'),
+                Text(
+                    'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
+                Text('Category: ${exercise.category}'),
+                const SizedBox(height: 10),
+                Text('Instructions:',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                for (var instruction in exercise.instructions)
+                  Text('- $instruction'),
+                const SizedBox(height: 10),
+                Text('Images:', style: TextStyle(fontWeight: FontWeight.bold)),
+                if (exercise.images != null)
+                  Image.asset('assets/photos/${exercise.images}')
+                else
+                  Text('No images available'),
+              ],
+            ),
           ),
           actions: [
             TextButton(

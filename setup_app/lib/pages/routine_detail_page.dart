@@ -15,13 +15,22 @@ class RoutineDetailPage extends StatefulWidget {
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
   late List<RoutineExercise> _exercises;
-  final ExerciseService _exerciseService =
-      ExerciseService(); // Instancia del servicio
+  final ExerciseService _exerciseService = ExerciseService();
 
   @override
   void initState() {
     super.initState();
     _exercises = widget.routine.exercises;
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final RoutineExercise exercise = _exercises.removeAt(oldIndex);
+      _exercises.insert(newIndex, exercise);
+    });
   }
 
   @override
@@ -46,38 +55,6 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            Text(
-              'Exercises:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: widget.routine.exercises.length,
-                  itemBuilder: (context, index) {
-                    final exercise = widget.routine.exercises[index];
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text('Exercise ID: ${exercise.exerciseId}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Reps: ${exercise.repetitions.join(", ")}'),
-                            Text('Weights: ${exercise.weights.join(", ")}'),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.info_outline),
-                          onPressed: () {
-                            _exerciseService.showExerciseInfo(
-                                context, _exercises[index].exerciseId);
-                          },
-                        ),
-                      ),
-                    );
-                  }),
-            ),
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -91,6 +68,45 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                   );
                 },
                 child: Text('Start Workout'),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Exercises:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ReorderableListView(
+                onReorder: _onReorder,
+                children: _exercises
+                    .asMap()
+                    .entries
+                    .map((entry) => Card(
+                          key: ValueKey(entry.value),
+                          margin: EdgeInsets.symmetric(vertical: 8.0),
+                          child: ListTile(
+                            title:
+                                Text('Exercise ID: ${entry.value.exerciseId}'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    'Reps: ${entry.value.repetitions.join(", ")}'),
+                                Text(
+                                    'Weights: ${entry.value.weights.join(", ")}'),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.info_outline),
+                              onPressed: () {
+                                _exerciseService.showExerciseInfo(
+                                    context, entry.value.exerciseId);
+                              },
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
             ),
           ],

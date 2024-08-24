@@ -146,33 +146,61 @@ class _NewPageState extends State<NewPage> {
                             ),
                           ),
                           child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(
-                                exercise.name,
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: isSelected
-                                      ? Theme.of(context).colorScheme.onPrimary
-                                      : Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
+                              // Imagen en la parte superior
+                              exercise.images != null
+                                  ? Image.asset(
+                                      'assets/photos/${exercise.images}',
+                                      height:
+                                          40, // Ajusta el tamaño según sea necesario
+                                      width: double.infinity,
+                                    )
+                                  : Container(
+                                      height:
+                                          100, // Tamaño de placeholder si no hay imagen
+                                      color: Colors.grey,
+                                      child: Center(child: Text('No Image')),
+                                    ),
+                              // Contenido debajo de la imagen
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        exercise.name,
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSelected
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                              : Theme.of(context)
+                                                  .colorScheme
+                                                  .onBackground,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                      Text(
+                                        exercise.primaryMuscles.isNotEmpty
+                                            ? exercise.primaryMuscles.join(', ')
+                                            : 'No muscles info',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: isSelected
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .onPrimary
+                                              : Colors.grey,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
-                              ),
-                              const SizedBox(height: 8.0),
-                              Text(
-                                exercise.primaryMuscles.isNotEmpty
-                                    ? exercise.primaryMuscles.join(', ')
-                                    : 'No muscles info',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: isSelected
-                                      ? Theme.of(context).colorScheme.onPrimary
-                                      : Colors.grey,
-                                ),
-                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
