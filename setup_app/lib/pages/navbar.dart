@@ -3,6 +3,7 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/pages/new_page.dart';
+import 'package:setup_app/pages/routine_statistics_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
 import 'package:setup_app/pages/your_profile.dart';
 
@@ -48,10 +49,16 @@ class NavBar extends StatelessWidget {
               );
             },
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.auto_graph),
             title: Text('Statistics'),
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RoutineStatisticsPage()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),

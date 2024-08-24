@@ -34,7 +34,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
         exerciseId: exercise.id,
         repetitions: [10, 10, 10],
         weights: [20, 20, 20],
-        isCompleted: [false, false, false],
+        completionStatus: [false, false, false],
       );
     }).toList();
 

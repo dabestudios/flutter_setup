@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:setup_app/model/exercise_service.dart';
+import 'package:setup_app/model/work_out_service.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -17,6 +18,8 @@ class RoutineWorkoutPage extends StatefulWidget {
 class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   late List<RoutineExercise> _editableExercises;
   final ExerciseService _exerciseService = ExerciseService();
+  final WorkoutService _workoutService = WorkoutService();
+
   int _hours = 0;
   int _minutes = 0;
   int _seconds = 0;
@@ -32,7 +35,8 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
             exerciseId: exercise.exerciseId,
             repetitions: List<int>.from(exercise.repetitions, growable: true),
             weights: List<int>.from(exercise.weights, growable: true),
-            isCompleted: List<bool>.filled(exercise.repetitions.length, false,
+            completionStatus: List<bool>.filled(
+                exercise.repetitions.length, false,
                 growable: true)))
         .toList();
   }
@@ -57,11 +61,11 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
 
   void _toggleCompletion(int exerciseIndex, int seriesIndex) async {
     setState(() {
-      _editableExercises[exerciseIndex].isCompleted[seriesIndex] =
-          !_editableExercises[exerciseIndex].isCompleted[seriesIndex];
+      _editableExercises[exerciseIndex].completionStatus[seriesIndex] =
+          !_editableExercises[exerciseIndex].completionStatus[seriesIndex];
     });
 
-    if (_editableExercises[exerciseIndex].isCompleted[seriesIndex]) {
+    if (_editableExercises[exerciseIndex].completionStatus[seriesIndex]) {
       await _audioPlayer.play(AssetSource('sounds/victory.mp3'));
     }
   }
@@ -70,7 +74,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     setState(() {
       _editableExercises[exerciseIndex].repetitions.add(0);
       _editableExercises[exerciseIndex].weights.add(0);
-      _editableExercises[exerciseIndex].isCompleted.add(false);
+      _editableExercises[exerciseIndex].completionStatus.add(false);
     });
   }
 
@@ -78,7 +82,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     setState(() {
       _editableExercises[exerciseIndex].repetitions.removeAt(seriesIndex);
       _editableExercises[exerciseIndex].weights.removeAt(seriesIndex);
-      _editableExercises[exerciseIndex].isCompleted.removeAt(seriesIndex);
+      _editableExercises[exerciseIndex].completionStatus.removeAt(seriesIndex);
     });
   }
 
@@ -88,7 +92,43 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     });
   }
 
-  void _finishWorkout() {
+  Future<void> _saveRoutine() async {
+    final routineData = {
+      "date": DateTime.now().toIso8601String(),
+      "totalDuration":
+          "${_hours.toString().padLeft(2, '0')}:${_minutes.toString().padLeft(2, '0')}:${_seconds.toString().padLeft(2, '0')}",
+      "exercises":
+          _editableExercises.map((exercise) => exercise.toMap()).toList(),
+    };
+
+    await _workoutService.saveRoutine(widget.routine.id, routineData);
+  }
+
+  void _finishWorkout() async {
+    _stopTimer(); // Detén el temporizador.
+
+    // Prepara los datos de la rutina para guardar.
+    Map<String, dynamic> routineData = {
+      'name': widget.routine.name,
+      'exercises': _editableExercises.map((exercise) {
+        return {
+          'exerciseId': exercise.exerciseId,
+          'repetitions': exercise.repetitions,
+          'weights': exercise.weights,
+          'completionStatus': exercise.completionStatus,
+        };
+      }).toList(),
+      'duration': {
+        'hours': _hours,
+        'minutes': _minutes,
+        'seconds': _seconds,
+      },
+    };
+
+    // Guarda la rutina usando el servicio.
+    await _workoutService.saveRoutine(widget.routine.id, routineData);
+
+    // Navega de vuelta o muestra un mensaje de éxito.
     Navigator.pop(context);
   }
 
@@ -221,7 +261,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                       exercise.repetitions.length,
                       (seriesIndex) => TableRow(
                         decoration: BoxDecoration(
-                          color: exercise.isCompleted[seriesIndex]
+                          color: exercise.completionStatus[seriesIndex]
                               ? Colors.greenAccent
                               : null,
                         ),
@@ -288,7 +328,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                               height: 48.0, // Altura consistente
                               padding: const EdgeInsets.all(8.0),
                               child: Checkbox(
-                                value: exercise.isCompleted[seriesIndex],
+                                value: exercise.completionStatus[seriesIndex],
                                 onChanged: (value) {
                                   _toggleCompletion(index, seriesIndex);
                                 },
