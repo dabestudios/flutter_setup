@@ -55,7 +55,6 @@ class WorkoutService {
       if (await file.exists()) {
         String content = await file.readAsString();
         exerciseStats = List<Map<String, dynamic>>.from(jsonDecode(content));
-        print(exerciseStats);
       }
     } catch (e) {
       // Manejar errores de lectura (si el archivo está vacío o corrupto)
@@ -64,7 +63,6 @@ class WorkoutService {
 
     // Añadir las estadísticas del ejercicio
     exerciseStats.add(exerciseStatsData);
-    print("AAAAAA");
 
     // Guardar el contenido actualizado
     await file.writeAsString(jsonEncode(exerciseStats));

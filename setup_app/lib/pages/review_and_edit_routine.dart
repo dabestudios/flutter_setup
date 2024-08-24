@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
-import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
@@ -100,9 +99,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       // Cargar las rutinas existentes
       List<Routine> routines = await routineStorage.loadRoutines();
 
-      // Mostrar rutinas cargadas en la consola (opcional)
-      print('Rutinas cargadas: $routines');
-
       // Agregar la nueva rutina a la lista de rutinas existentes
       routines.add(routine);
 
@@ -112,8 +108,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       // Guardar el JSON en el archivo local
       final file = await routineStorage.getLocalFile();
       await file.writeAsString(jsonString);
-
-      print('Rutina guardada exitosamente');
     } catch (e) {
       print("Error saving routine: $e");
     }

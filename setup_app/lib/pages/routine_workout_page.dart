@@ -105,7 +105,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
 
     // Guarda la rutina en el archivo de rutinas
     await _workoutService.saveRoutine(widget.routine.id, routineData);
-    print('Rutina guardada');
     // Guarda estadísticas de cada ejercicio en el archivo de estadísticas de ejercicios
     for (var exercise in _editableExercises) {
       final exerciseStatsData = {
@@ -115,7 +114,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
         "weights": exercise.weights,
         "completionStatus": exercise.completionStatus,
       };
-      print(exerciseStatsData);
 
       // Guarda cada ejercicio en el archivo de estadísticas de ejercicios
       await _workoutService.saveExerciseStats(exerciseStatsData);
@@ -162,9 +160,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   }
 
   void _stopTimer() {
-    if (_timer != null) {
-      _timer.cancel();
-    }
+    _timer.cancel();
   }
 
   @override

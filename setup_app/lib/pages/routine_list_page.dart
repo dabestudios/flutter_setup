@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/routine_detail_page.dart';
-import 'package:setup_app/pages/routine_workout_page.dart';
-import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
-import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineListPage extends StatefulWidget {

@@ -46,7 +46,7 @@ class _NewPageState extends State<NewPage> {
           });
         },
         onAdFailedToLoad: (ad, err) {
-          print('Failed to load a banner ad: ${err.message}');
+          print('Error to load a banner ad: ${err.message}');
           ad.dispose();
         },
       ),
