@@ -29,11 +29,27 @@ class RoutineStorage {
   Future<void> _loadRoutines() async {
     try {
       final file = await _getLocalFile();
+      if (!await file.exists()) {
+        _routines = [];
+        return;
+      }
       String contents = await file.readAsString();
       List<dynamic> jsonList = jsonDecode(contents);
       _routines = jsonList.map((json) => Routine.fromJson(json)).toList();
     } catch (e) {
       print("Error loading routines: $e");
+      _routines = []; // Asegurarse de que _routines no sea null
+    }
+  }
+
+  Future<void> _saveRoutinesUpdated(List<Routine> routines) async {
+    try {
+      final file = await _getLocalFile();
+      String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
+      await file.writeAsString(jsonString);
+      _routines = routines; // Actualizar el estado interno
+    } catch (e) {
+      print("Error saving routines: $e");
     }
   }
 
@@ -45,12 +61,8 @@ class RoutineStorage {
       // Agregar la nueva rutina a la lista de rutinas existentes
       routines.add(routine);
 
-      // Convertir la lista actualizada a JSON
-      String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
-
-      // Guardar el JSON en el archivo local
-      final file = await _getLocalFile();
-      await file.writeAsString(jsonString);
+      // Guardar la lista actualizada
+      await _saveRoutinesUpdated(routines);
     } catch (e) {
       print("Error saving routine: $e");
     }
@@ -63,30 +75,27 @@ class RoutineStorage {
     return _routines!;
   }
 
-  Future<void> _saveRoutinesUpdated(List<Routine> routines) async {
-    final file = await _getLocalFile();
-    String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
-    await file.writeAsString(jsonString);
-    await _loadRoutines(); // Recargar después de guardar para mantener el estado actualizado
-  }
-
   Future<void> updateRoutine(String id, Routine updatedRoutine) async {
-    await getRoutines(); // Asegurarse de que las rutinas estén cargadas
+    try {
+      await getRoutines(); // Asegurarse de que las rutinas estén cargadas
 
-    // Asegurarse de que completionStatus sea false para todos los ejercicios
-    for (var exercise in updatedRoutine.exercises) {
-      exercise.completionStatus =
-          List.filled(exercise.repetitions.length, false);
-    }
+      // Asegurarse de que completionStatus sea false para todos los ejercicios
+      for (var exercise in updatedRoutine.exercises) {
+        exercise.completionStatus =
+            List.filled(exercise.repetitions.length, false);
+      }
 
-    int routineIndex = _routines!.indexWhere((routine) => routine.id == id);
+      int routineIndex = _routines!.indexWhere((routine) => routine.id == id);
 
-    if (routineIndex != -1) {
-      // Si se encuentra la rutina, actualizarla
-      _routines![routineIndex] = updatedRoutine;
-      await _saveRoutinesUpdated(_routines!); // Guardar la lista actualizada
-    } else {
-      print("Routine with id $id not found.");
+      if (routineIndex != -1) {
+        // Si se encuentra la rutina, actualizarla
+        _routines![routineIndex] = updatedRoutine;
+        await _saveRoutinesUpdated(_routines!); // Guardar la lista actualizada
+      } else {
+        print("Routine with id $id not found.");
+      }
+    } catch (e) {
+      print("Error updating routine: $e");
     }
   }
 }

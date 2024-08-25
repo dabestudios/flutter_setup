@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
+import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 
@@ -33,6 +35,27 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     });
   }
 
+  void _startWorkout() async {
+    // Accede al modelo de rutina desde el Provider
+    final routineModel = Provider.of<RoutineModel>(context, listen: false);
+
+    // Guarda la rutina en RoutineModel
+    routineModel.setRoutine(widget.routine).then((_) {
+      // Navega a la página de entrenamiento de la rutina
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoutineWorkoutPage(),
+        ),
+      );
+    }).catchError((error) {
+      // Maneja el error si ocurre durante el guardado
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save routine: $error')),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +80,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () {
-                  // Navega a la página de entrenamiento de la rutina
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          RoutineWorkoutPage(routine: widget.routine),
-                    ),
-                  );
-                },
+                onPressed: _startWorkout, // Cambiar el método llamado aquí
                 child: Text('Start Workout'),
               ),
             ),

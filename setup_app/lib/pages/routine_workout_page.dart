@@ -1,16 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/model/work_out_service.dart';
+import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class RoutineWorkoutPage extends StatefulWidget {
-  final Routine routine;
-
-  RoutineWorkoutPage({required this.routine});
-
   @override
   _RoutineWorkoutPageState createState() => _RoutineWorkoutPageState();
 }
@@ -29,8 +27,23 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   @override
   void initState() {
     super.initState();
-    _startTimer();
-    _editableExercises = widget.routine.exercises
+
+    // Obtener la rutina actual del RoutineModel
+    final routineModel = Provider.of<RoutineModel>(context, listen: false);
+    final routine = routineModel.currentRoutine;
+
+    if (routine == null) {
+      // Manejar el caso en el que no hay rutina disponible
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No routine found.')),
+        );
+        Navigator.pop(context);
+      });
+      return;
+    }
+
+    _editableExercises = routine.exercises
         .map((exercise) => RoutineExercise(
             exerciseId: exercise.exerciseId,
             repetitions: List<int>.from(exercise.repetitions, growable: true),
@@ -39,6 +52,8 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 exercise.repetitions.length, false,
                 growable: true)))
         .toList();
+
+    _startTimer();
   }
 
   void _startTimer() {
@@ -95,9 +110,22 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   void _finishWorkout() async {
     _stopTimer(); // Detén el temporizador.
 
+    // Obtener la rutina actual del RoutineModel
+    final routineModel = Provider.of<RoutineModel>(context, listen: false);
+    final routine = routineModel.currentRoutine;
+
+    if (routine == null) {
+      // Manejar el caso en el que no hay rutina disponible
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No routine found.')),
+      );
+      Navigator.pop(context);
+      return;
+    }
+
     // Prepara los datos de la rutina para guardar.
     Map<String, dynamic> routineData = {
-      'name': widget.routine.name,
+      'name': routine.name,
       'exercises': _editableExercises.map((exercise) {
         return {
           'exerciseId': exercise.exerciseId,
@@ -114,7 +142,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     };
 
     // Guarda la rutina usando el servicio.
-    await _workoutService.saveRoutineStats(widget.routine.id, routineData);
+    await _workoutService.saveRoutineStats(routine.id, routineData);
 
     // Guarda las estadísticas de los ejercicios.
     for (var exercise in _editableExercises) {
@@ -138,9 +166,24 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    final routineModel = Provider.of<RoutineModel>(context);
+
+    final routine = routineModel.currentRoutine;
+
+    if (routine == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Error'),
+        ),
+        body: Center(
+          child: Text('No routine available.'),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.routine.name),
+        title: Text('Workout  ${routine.name}'),
       ),
       body: ListView.builder(
         itemCount: _editableExercises.length,
