@@ -49,35 +49,45 @@ class WorkoutService {
   // Método para guardar las estadísticas de ejercicios
   Future<void> saveExerciseStats(Map<String, dynamic> exerciseStatsData) async {
     final file = await _getExerciseStatsFile();
-    List<Map<String, dynamic>> exerciseStats = [];
+    Map<String, dynamic> exerciseStats = {};
 
     try {
-      // Leer el contenido existente
+      // Leer el contenido existente del archivo
       if (await file.exists()) {
         String content = await file.readAsString();
-        exerciseStats = List<Map<String, dynamic>>.from(jsonDecode(content));
+        exerciseStats = Map<String, dynamic>.from(jsonDecode(content));
       }
     } catch (e) {
-      // Manejar errores de lectura (si el archivo está vacío o corrupto)
       print('Error al leer el archivo de estadísticas de ejercicios: $e');
     }
 
-    // Añadir las estadísticas del ejercicio
-    exerciseStats.add(exerciseStatsData);
+    String exerciseId = exerciseStatsData['exerciseId'];
 
-    // Guardar el contenido actualizado
+    // Si ya existe una entrada para este exerciseId, agregamos los nuevos datos
+    if (exerciseStats.containsKey(exerciseId)) {
+      List<dynamic> existingData = exerciseStats[exerciseId]['data'];
+      existingData.add(exerciseStatsData);
+    } else {
+      // Si no existe, creamos una nueva entrada
+      exerciseStats[exerciseId] = {
+        'exerciseId': exerciseId,
+        'data': [exerciseStatsData]
+      };
+    }
+
+    // Guardar el contenido actualizado en el archivo
     await file.writeAsString(jsonEncode(exerciseStats));
   }
 
   // Método para cargar las estadísticas de ejercicios desde una lista
-  Future<List<Map<String, dynamic>>> loadExerciseStats() async {
+  Future<Map<String, dynamic>> loadExerciseStats() async {
     final file = await _getExerciseStatsFile();
-    List<Map<String, dynamic>> exerciseStats = [];
+    Map<String, dynamic> exerciseStats = {};
 
     try {
       if (await file.exists()) {
         String content = await file.readAsString();
-        exerciseStats = List<Map<String, dynamic>>.from(jsonDecode(content));
+        exerciseStats = Map<String, dynamic>.from(jsonDecode(content));
       }
     } catch (e) {
       print('Error al cargar el archivo de estadísticas de ejercicios: $e');

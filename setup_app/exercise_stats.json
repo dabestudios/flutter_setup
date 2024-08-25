@@ -1,40 +1,131 @@
-[
-    {
+{
+    "Ankle_Circles": {
         "exerciseId": "Ankle_Circles",
-        "date": "2024-08-25T10:14:49.003620",
-        "repetitions": [
-            10,
-            10,
-            10
-        ],
-        "weights": [
-            20,
-            20,
-            20
-        ],
-        "completionStatus": [
-            false,
-            false,
-            true
+        "data": [
+            {
+                "exerciseId": "Ankle_Circles",
+                "date": "2024-08-25T11:11:55.367432",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            },
+            {
+                "exerciseId": "Ankle_Circles",
+                "date": "2024-08-25T11:12:07.226595",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            }
         ]
     },
-    {
+    "Balance_Board": {
         "exerciseId": "Balance_Board",
-        "date": "2024-08-25T10:14:49.020853",
-        "repetitions": [
-            10,
-            10,
-            10
-        ],
-        "weights": [
-            20,
-            20,
-            20
-        ],
-        "completionStatus": [
-            true,
-            true,
-            false
+        "data": [
+            {
+                "exerciseId": "Balance_Board",
+                "date": "2024-08-25T11:11:55.374987",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            },
+            {
+                "exerciseId": "Balance_Board",
+                "date": "2024-08-25T11:12:07.249998",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            }
+        ]
+    },
+    "Band_Assisted_Pull-Up": {
+        "exerciseId": "Band_Assisted_Pull-Up",
+        "data": [
+            {
+                "exerciseId": "Band_Assisted_Pull-Up",
+                "date": "2024-08-25T11:11:55.392755",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            },
+            {
+                "exerciseId": "Band_Assisted_Pull-Up",
+                "date": "2024-08-25T11:12:07.265120",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            }
         ]
     }
-]
+}

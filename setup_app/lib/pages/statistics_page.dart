@@ -9,7 +9,7 @@ class StatisticsPage extends StatefulWidget {
 class _StatisticsPageState extends State<StatisticsPage> {
   final WorkoutService _workoutService = WorkoutService();
   List<Map<String, dynamic>> _routines = [];
-  List<Map<String, dynamic>> _exerciseStats = [];
+  Map<String, dynamic> _exerciseStats = {};
 
   @override
   void initState() {
@@ -26,7 +26,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
       // Manejo de error si los archivos no existen o están vacíos
       setState(() {
         _routines = [];
-        _exerciseStats = [];
+        _exerciseStats = {};
       });
     }
   }
@@ -86,22 +86,27 @@ class _StatisticsPageState extends State<StatisticsPage> {
     );
   }
 
-  Widget _buildExerciseStatsCard(Map<String, dynamic> exerciseStats) {
+  Widget _buildExerciseStatsCard(String exerciseId, List<dynamic> stats) {
     return Card(
       child: ListTile(
-        title: Text('Exercise ID: ${exerciseStats['exerciseId']}'),
+        title: Text(exerciseId),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Fecha: ${exerciseStats['date']}'),
-            Text('Repeticiones: ${exerciseStats['repetitions'].join(', ')}'),
-            Text('Pesos: ${exerciseStats['weights'].join(', ')}'),
-            Text(
-                'Completado: ${exerciseStats['completionStatus'].map((status) => status ? "Sí" : "No").join(', ')}'),
-          ],
+          children: stats.map((stat) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Fecha: ${stat['date']}'),
+                Text('Repeticiones: ${stat['repetitions'].join(", ")}'),
+                Text('Pesos: ${stat['weights'].join(", ")}'),
+                Text('Completado: ${stat['completionStatus'].join(", ")}'),
+                SizedBox(height: 8.0),
+              ],
+            );
+          }).toList(),
         ),
         onTap: () {
-          // Aquí podrías abrir una nueva página con más detalles sobre la rutina específica
+          // Aquí podrías abrir una nueva página con más detalles sobre el ejercicio específico
         },
       ),
     );
@@ -134,10 +139,10 @@ class _StatisticsPageState extends State<StatisticsPage> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ..._exerciseStats
-                    .map((exerciseStats) =>
-                        _buildExerciseStatsCard(exerciseStats))
-                    .toList(),
+                ..._exerciseStats.entries.map((entry) {
+                  return _buildExerciseStatsCard(
+                      entry.key, List<dynamic>.from(entry.value['data']));
+                }).toList(),
               ],
             ),
     );
