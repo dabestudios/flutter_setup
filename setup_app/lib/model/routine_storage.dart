@@ -47,7 +47,8 @@ class RoutineStorage {
       final file = await _getLocalFile();
       String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
       await file.writeAsString(jsonString);
-      _routines = routines; // Actualizar el estado interno
+      _routines = routines;
+      _loadRoutines(); // Actualizar la lista de rutinas
     } catch (e) {
       print("Error saving routines: $e");
     }

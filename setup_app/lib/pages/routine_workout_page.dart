@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
+import 'package:setup_app/model/routine_storage.dart';
 import 'package:setup_app/model/work_out_service.dart';
 import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
 import 'package:setup_app/tables/routine.dart';
@@ -17,12 +18,14 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   late List<RoutineExercise> _editableExercises;
   final ExerciseService _exerciseService = ExerciseService();
   final WorkoutService _workoutService = WorkoutService();
+  final RoutineStorage routineStorage = RoutineStorage();
 
   int _hours = 0;
   int _minutes = 0;
   int _seconds = 0;
   late Timer _timer;
   final AudioPlayer _audioPlayer = AudioPlayer();
+  bool _hasChanges = false;
 
   @override
   void initState() {
@@ -90,6 +93,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       _editableExercises[exerciseIndex].repetitions.add(0);
       _editableExercises[exerciseIndex].weights.add(0);
       _editableExercises[exerciseIndex].completionStatus.add(false);
+      _hasChanges = true;
     });
   }
 
@@ -98,12 +102,14 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       _editableExercises[exerciseIndex].repetitions.removeAt(seriesIndex);
       _editableExercises[exerciseIndex].weights.removeAt(seriesIndex);
       _editableExercises[exerciseIndex].completionStatus.removeAt(seriesIndex);
+      _hasChanges = true;
     });
   }
 
   void _removeExercise(int exerciseIndex) {
     setState(() {
       _editableExercises.removeAt(exerciseIndex);
+      _hasChanges = true;
     });
   }
 
@@ -156,6 +162,13 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       await _workoutService.saveExerciseStats(exerciseStatsData);
     }
 
+    //gaurdar la rutina si hay cambios
+    if (_hasChanges) {
+      print('Routine has changes');
+      print(routine.id);
+      await routineStorage.updateRoutine(routine.id, routine);
+      //TODO: Guardar la rutina en el almacenamiento local
+    }
     // Navega de vuelta o muestra un mensaje de éxito.
     Navigator.pop(context);
   }
