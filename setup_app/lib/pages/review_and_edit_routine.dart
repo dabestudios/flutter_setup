@@ -83,7 +83,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     );
 
     // Guardar la rutina en la base de datos
-    await _saveRoutineToDatabase(routine);
+    await routineStorage.saveRoutines(routine);
 
     // Guardar estadísticas de ejercicios para esta rutina
     widget.onSave(routine);
@@ -92,25 +92,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
     );
-  }
-
-  Future<void> _saveRoutineToDatabase(Routine routine) async {
-    try {
-      // Cargar las rutinas existentes
-      List<Routine> routines = await routineStorage.getRoutines();
-
-      // Agregar la nueva rutina a la lista de rutinas existentes
-      routines.add(routine);
-
-      // Convertir la lista actualizada a JSON
-      String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
-
-      // Guardar el JSON en el archivo local
-      final file = await routineStorage.getLocalFile();
-      await file.writeAsString(jsonString);
-    } catch (e) {
-      print("Error saving routine: $e");
-    }
   }
 
   @override

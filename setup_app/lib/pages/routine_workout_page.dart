@@ -127,6 +127,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       };
       await _workoutService.saveExerciseStats(exerciseStatsData);
     }
+
     // Navega de vuelta o muestra un mensaje de éxito.
     Navigator.pop(context);
   }
