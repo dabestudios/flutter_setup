@@ -19,8 +19,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   Future<void> _loadStatistics() async {
     try {
-      _routines = await _workoutService.loadRoutines();
-      _exerciseStats = await _workoutService.loadExerciseStats();
+      _routines = await _workoutService.getRoutineStats();
+      _exerciseStats = await _workoutService.getExerciseStats();
       setState(() {});
     } catch (e) {
       // Manejo de error si los archivos no existen o están vacíos
@@ -32,7 +32,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _buildRoutineCard(Map<String, dynamic> routine) {
-    // Obteniendo los datos relevantes de la rutina
     String routineName = routine['name'] ?? 'Sin nombre';
     String lastDate = routine['lastDate'] ?? 'Fecha no disponible';
     int exerciseCount = routine['exercises']?.length ?? 0;
@@ -99,7 +98,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Text('Fecha: ${stat['date']}'),
                 Text('Repeticiones: ${stat['repetitions'].join(", ")}'),
                 Text('Pesos: ${stat['weights'].join(", ")}'),
-                Text('Completado: ${stat['completionStatus'].join(", ")}'),
+                Text(
+                    'Completado: ${stat['completionStatus'].map((status) => status ? "Sí" : "No").join(", ")}'),
                 SizedBox(height: 8.0),
               ],
             );

@@ -140,12 +140,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.routine.name),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.check),
-            onPressed: _finishWorkout,
-          ),
-        ],
       ),
       body: ListView.builder(
         itemCount: _editableExercises.length,
