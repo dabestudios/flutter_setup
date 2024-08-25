@@ -16,7 +16,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
   @override
   void initState() {
     super.initState();
-    _routinesFuture = _routineStorage.loadRoutines();
+    _routinesFuture = _routineStorage.getRoutines();
   }
 
   @override

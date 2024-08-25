@@ -97,7 +97,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
   Future<void> _saveRoutineToDatabase(Routine routine) async {
     try {
       // Cargar las rutinas existentes
-      List<Routine> routines = await routineStorage.loadRoutines();
+      List<Routine> routines = await routineStorage.getRoutines();
 
       // Agregar la nueva rutina a la lista de rutinas existentes
       routines.add(routine);

@@ -6,6 +6,7 @@ import 'package:setup_app/tables/routine.dart';
 class RoutineStorage {
   // Crear una instancia estática de RoutineStorage
   static final RoutineStorage _instance = RoutineStorage._internal();
+  List<Routine>? _routines;
 
   // Constructor privado
   RoutineStorage._internal();
@@ -26,15 +27,14 @@ class RoutineStorage {
     return File('$path/routines.json');
   }
 
-  Future<List<Routine>> loadRoutines() async {
+  Future<void> _loadRoutines() async {
     try {
       final file = await getLocalFile();
       String contents = await file.readAsString();
       List<dynamic> jsonList = jsonDecode(contents);
-      return jsonList.map((json) => Routine.fromJson(json)).toList();
+      _routines = jsonList.map((json) => Routine.fromJson(json)).toList();
     } catch (e) {
       print("Error loading routines: $e");
-      return [];
     }
   }
 
@@ -43,5 +43,12 @@ class RoutineStorage {
     String jsonRoutines =
         jsonEncode(routines.map((routine) => routine.toJson()).toList());
     await file.writeAsString(jsonRoutines);
+  }
+
+  Future<List<Routine>> getRoutines() async {
+    if (_routines == null) {
+      await _loadRoutines();
+    }
+    return _routines!;
   }
 }
