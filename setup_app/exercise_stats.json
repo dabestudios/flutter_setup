@@ -1,0 +1,40 @@
+[
+    {
+        "exerciseId": "Ankle_Circles",
+        "date": "2024-08-25T10:14:49.003620",
+        "repetitions": [
+            10,
+            10,
+            10
+        ],
+        "weights": [
+            20,
+            20,
+            20
+        ],
+        "completionStatus": [
+            false,
+            false,
+            true
+        ]
+    },
+    {
+        "exerciseId": "Balance_Board",
+        "date": "2024-08-25T10:14:49.020853",
+        "repetitions": [
+            10,
+            10,
+            10
+        ],
+        "weights": [
+            20,
+            20,
+            20
+        ],
+        "completionStatus": [
+            true,
+            true,
+            false
+        ]
+    }
+]

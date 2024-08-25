@@ -92,34 +92,6 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     });
   }
 
-  Future<void> _saveRoutine() async {
-    final routineData = {
-      "id": widget.routine.id, // Asegúrate de incluir el ID de la rutina
-      "name": widget.routine.name, // Incluye el nombre de la rutina
-      "date": DateTime.now().toIso8601String(),
-      "totalDuration":
-          "${_hours.toString().padLeft(2, '0')}:${_minutes.toString().padLeft(2, '0')}:${_seconds.toString().padLeft(2, '0')}",
-      "exercises":
-          _editableExercises.map((exercise) => exercise.toMap()).toList(),
-    };
-
-    // Guarda la rutina en el archivo de rutinas
-    await _workoutService.saveRoutine(widget.routine.id, routineData);
-    // Guarda estadísticas de cada ejercicio en el archivo de estadísticas de ejercicios
-    for (var exercise in _editableExercises) {
-      final exerciseStatsData = {
-        "exerciseId": exercise.exerciseId,
-        "date": DateTime.now().toIso8601String(),
-        "repetitions": exercise.repetitions,
-        "weights": exercise.weights,
-        "completionStatus": exercise.completionStatus,
-      };
-
-      // Guarda cada ejercicio en el archivo de estadísticas de ejercicios
-      await _workoutService.saveExerciseStats(exerciseStatsData);
-    }
-  }
-
   void _finishWorkout() async {
     _stopTimer(); // Detén el temporizador.
 
@@ -142,7 +114,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     };
 
     // Guarda la rutina usando el servicio.
-    await _workoutService.saveRoutine(widget.routine.id, routineData);
+    await _workoutService.saveRoutineStats(widget.routine.id, routineData);
 
     // Guarda las estadísticas de los ejercicios.
     for (var exercise in _editableExercises) {

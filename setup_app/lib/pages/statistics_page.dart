@@ -32,16 +32,51 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _buildRoutineCard(Map<String, dynamic> routine) {
+    // Obteniendo los datos relevantes de la rutina
+    String routineName = routine['name'] ?? 'Sin nombre';
+    String lastDate = routine['lastDate'] ?? 'Fecha no disponible';
+    int exerciseCount = routine['exercises']?.length ?? 0;
+
     return Card(
       child: ListTile(
-        title: Text(routine['name']),
+        title: Text(
+          routineName,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Duración: ${routine['totalDuration']}'),
             SizedBox(height: 8.0),
-            Text('Ejercicios: ${routine['exercises'].length}'),
-            Text('Fecha: ${routine['date']}'),
+            Text('Fecha de la última rutina: $lastDate'),
+            Text('Número de ejercicios: $exerciseCount'),
+            SizedBox(height: 8.0),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: routine['exercises']?.map<Widget>((exercise) {
+                    String exerciseId =
+                        exercise['exerciseId'] ?? 'ID no disponible';
+                    List<dynamic> repetitions = exercise['repetitions'] ?? [];
+                    List<dynamic> weights = exercise['weights'] ?? [];
+                    List<dynamic> completionStatus =
+                        exercise['completionStatus'] ?? [];
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Ejercicio: $exerciseId'),
+                          Text('Repeticiones: ${repetitions.join(", ")}'),
+                          Text('Pesos: ${weights.join(", ")}'),
+                          Text(
+                              'Completado: ${completionStatus.map((status) => status ? "Sí" : "No").join(", ")}'),
+                          Divider(),
+                        ],
+                      ),
+                    );
+                  })?.toList() ??
+                  [],
+            ),
           ],
         ),
         onTap: () {
