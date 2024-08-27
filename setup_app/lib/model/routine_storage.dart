@@ -76,27 +76,22 @@ class RoutineStorage {
     return _routines!;
   }
 
-  Future<void> updateRoutine(String id, Routine updatedRoutine) async {
+  Future<void> replaceCurrentRoutine(Routine currentRoutine) async {
     try {
-      await getRoutines(); // Asegurarse de que las rutinas estén cargadas
+      await getRoutines(); // Asegúrate de que las rutinas estén cargadas
 
-      // Asegurarse de que completionStatus sea false para todos los ejercicios
-      for (var exercise in updatedRoutine.exercises) {
-        exercise.completionStatus =
-            List.filled(exercise.repetitions.length, false);
-      }
-
-      int routineIndex = _routines!.indexWhere((routine) => routine.id == id);
+      int routineIndex =
+          _routines!.indexWhere((routine) => routine.id == currentRoutine.id);
 
       if (routineIndex != -1) {
-        // Si se encuentra la rutina, actualizarla
-        _routines![routineIndex] = updatedRoutine;
+        // Si se encuentra la rutina, reemplazarla
+        _routines![routineIndex] = currentRoutine;
         await _saveRoutinesUpdated(_routines!); // Guardar la lista actualizada
       } else {
-        print("Routine with id $id not found.");
+        print("Routine with id ${currentRoutine.id} not found.");
       }
     } catch (e) {
-      print("Error updating routine: $e");
+      print("Error replacing routine: $e");
     }
   }
 }

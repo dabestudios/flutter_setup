@@ -161,13 +161,12 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       };
       await _workoutService.saveExerciseStats(exerciseStatsData);
     }
+    _workoutService.loadExerciseStats();
 
-    //gaurdar la rutina si hay cambios
+    // Si hay cambios, guarda la rutina en el almacenamiento local
     if (_hasChanges) {
-      print('Routine has changes');
-      print(routine.id);
-      await routineStorage.updateRoutine(routine.id, routine);
-      //TODO: Guardar la rutina en el almacenamiento local
+      routine.exercises = _editableExercises;
+      await routineStorage.replaceCurrentRoutine(routine);
     }
     // Navega de vuelta o muestra un mensaje de éxito.
     Navigator.pop(context);

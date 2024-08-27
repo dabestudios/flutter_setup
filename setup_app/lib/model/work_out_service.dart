@@ -46,7 +46,6 @@ class WorkoutService {
         String content = await file.readAsString();
         routines = List<Map<String, dynamic>>.from(jsonDecode(content));
       }
-      await _loadRoutinesStats();
     } catch (e) {
       // Manejar errores de lectura (si el archivo está vacío o corrupto)
       print('Error al leer el archivo de rutinas: $e');
@@ -71,7 +70,6 @@ class WorkoutService {
         String content = await file.readAsString();
         exerciseStats = Map<String, dynamic>.from(jsonDecode(content));
       }
-      await _loadExerciseStats();
     } catch (e) {
       print('Error al leer el archivo de estadísticas de ejercicios: $e');
     }
@@ -95,7 +93,7 @@ class WorkoutService {
   }
 
   // Método para cargar las estadísticas de ejercicios desde una lista
-  Future<void> _loadExerciseStats() async {
+  Future<void> loadExerciseStats() async {
     final file = await _getExerciseStatsFile();
 
     try {
@@ -133,7 +131,7 @@ class WorkoutService {
   // Método para obtener las estadísticas de ejercicios
   Future<Map<String, dynamic>> getExerciseStats() async {
     if (_exerciseStats == null) {
-      await _loadExerciseStats();
+      await loadExerciseStats();
     }
     return _exerciseStats ?? {}; // Asegurarse de que nunca devuelva null
   }
