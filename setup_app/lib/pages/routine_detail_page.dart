@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart'; // Importar provider
+import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
-import 'package:setup_app/tables/exercise.dart';
+import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
-import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineDetailPage extends StatefulWidget {
   final Routine routine;
@@ -16,14 +17,43 @@ class RoutineDetailPage extends StatefulWidget {
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
   late List<RoutineExercise> _exercises;
-  final ExerciseLoader _exerciseLoader = ExerciseLoader();
-  final RoutineStorage _routineStorage =
-      RoutineStorage(); // Usar la instancia singleton
+  final ExerciseService _exerciseService = ExerciseService();
 
   @override
   void initState() {
     super.initState();
     _exercises = widget.routine.exercises;
+  }
+
+  void _onReorder(int oldIndex, int newIndex) {
+    setState(() {
+      if (newIndex > oldIndex) {
+        newIndex -= 1;
+      }
+      final RoutineExercise exercise = _exercises.removeAt(oldIndex);
+      _exercises.insert(newIndex, exercise);
+    });
+  }
+
+  void _startWorkout() async {
+    // Accede al modelo de rutina desde el Provider
+    final routineModel = Provider.of<RoutineModel>(context, listen: false);
+
+    // Guarda la rutina en RoutineModel
+    routineModel.setRoutine(widget.routine).then((_) {
+      // Navega a la página de entrenamiento de la rutina
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RoutineWorkoutPage(),
+        ),
+      );
+    }).catchError((error) {
+      // Maneja el error si ocurre durante el guardado
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save routine: $error')),
+      );
+    });
   }
 
   @override
@@ -48,109 +78,54 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
+            Center(
+              child: ElevatedButton(
+                onPressed: _startWorkout, // Cambiar el método llamado aquí
+                child: Text('Start Workout'),
+              ),
+            ),
+            const SizedBox(height: 20),
             Text(
               'Exercises:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: ListView.builder(
-                  itemCount: widget.routine.exercises.length,
-                  itemBuilder: (context, index) {
-                    final exercise = widget.routine.exercises[index];
-                    return Card(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
-                      child: ListTile(
-                        title: Text('Exercise ID: ${exercise.exerciseId}'),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Reps: ${exercise.repetitions.join(", ")}'),
-                            Text('Weights: ${exercise.weights.join(", ")}'),
-                          ],
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.info_outline),
-                          onPressed: () {
-                            showExerciseInfo(
-                                context, _exercises[index].exerciseId);
-                          },
-                        ),
-                      ),
-                    );
-                  }),
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navega a la página de entrenamiento de la rutina
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          RoutineWorkoutPage(routine: widget.routine),
-                    ),
-                  );
-                },
-                child: Text('Start Workout'),
+              child: ReorderableListView(
+                onReorder: _onReorder,
+                children: _exercises
+                    .asMap()
+                    .entries
+                    .map((entry) => Card(
+                          key: ValueKey(entry.value),
+                          margin: EdgeInsets.symmetric(vertical: 8.0),
+                          child: ListTile(
+                            title:
+                                Text('Exercise ID: ${entry.value.exerciseId}'),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                    'Reps: ${entry.value.repetitions.join(", ")}'),
+                                Text(
+                                    'Weights: ${entry.value.weights.join(", ")}'),
+                              ],
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(Icons.info_outline),
+                              onPressed: () {
+                                _exerciseService.showExerciseInfo(
+                                    context, entry.value.exerciseId);
+                              },
+                            ),
+                          ),
+                        ))
+                    .toList(),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void showExerciseInfo(BuildContext context, String exerciseId) async {
-    Exercise? exercise = await _exerciseLoader.getExerciseById(exerciseId);
-
-    if (exercise == null) {
-      print('Error: Exercise not found for ID $exerciseId');
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(exercise.name),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Force: ${exercise.force ?? "N/A"}'),
-              Text('Level: ${exercise.level}'),
-              Text('Mechanic: ${exercise.mechanic ?? "N/A"}'),
-              Text('Equipment: ${exercise.equipment ?? "N/A"}'),
-              Text('Primary Muscles: ${exercise.primaryMuscles.join(", ")}'),
-              Text(
-                  'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
-              Text('Category: ${exercise.category}'),
-              const SizedBox(height: 10),
-              Text(
-                'Instructions:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              for (var instruction in exercise.instructions)
-                Text('- $instruction'),
-              const SizedBox(height: 10),
-              Text(
-                'Images:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              for (var image in exercise.images) Text('- $image'),
-            ],
-          ),
-          actions: [
-            TextButton(
-              child: Text('Close'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

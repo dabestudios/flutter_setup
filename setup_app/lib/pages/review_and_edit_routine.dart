@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
-import 'package:setup_app/tables/exercise_stats.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
@@ -34,7 +33,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
         exerciseId: exercise.id,
         repetitions: [10, 10, 10],
         weights: [20, 20, 20],
-        isCompleted: [false, false, false],
+        completionStatus: [false, false, false],
       );
     }).toList();
 
@@ -84,7 +83,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     );
 
     // Guardar la rutina en la base de datos
-    await _saveRoutineToDatabase(routine);
+    await routineStorage.saveRoutines(routine);
 
     // Guardar estadísticas de ejercicios para esta rutina
     widget.onSave(routine);
@@ -93,34 +92,6 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
     );
-  }
-
-  Future<void> _saveRoutineToDatabase(Routine routine) async {
-    try {
-      // Cargar las rutinas existentes
-      List<Routine> routines = await routineStorage.loadRoutines();
-
-      // Mostrar rutinas cargadas en la consola (opcional)
-      print('Rutinas cargadas: $routines');
-
-      // Agregar la nueva rutina a la lista de rutinas existentes
-      routines.add(routine);
-
-      // Convertir la lista actualizada a JSON
-      String jsonString = jsonEncode(routines.map((r) => r.toJson()).toList());
-
-      // Guardar el JSON en el archivo local
-      final file = await routineStorage.getLocalFile();
-      await file.writeAsString(jsonString);
-
-      print('Rutina guardada exitosamente');
-    } catch (e) {
-      print("Error saving routine: $e");
-    }
-  }
-
-  void _saveExerciseStatsToDatabase(ExerciseStats stats) {
-    // Implementar la lógica para guardar las estadísticas del ejercicio en la base de datos
   }
 
   @override

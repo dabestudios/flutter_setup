@@ -1,0 +1,45 @@
+[
+    {
+        "id": "[#c8c1e]",
+        "name": "hols",
+        "lastDate": "2024-08-25T10:14:40.891550",
+        "exercises": [
+            {
+                "exerciseId": "Ankle_Circles",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            },
+            {
+                "exerciseId": "Balance_Board",
+                "repetitions": [
+                    10,
+                    10,
+                    10
+                ],
+                "weights": [
+                    20,
+                    20,
+                    20
+                ],
+                "completionStatus": [
+                    false,
+                    false,
+                    false
+                ]
+            }
+        ]
+    }
+]

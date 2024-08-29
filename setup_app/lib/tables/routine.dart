@@ -4,7 +4,7 @@ class Routine {
   final String id;
   final String name;
   final DateTime lastDate;
-  final List<RoutineExercise> exercises;
+  List<RoutineExercise> exercises;
 
   Routine({
     required this.id,

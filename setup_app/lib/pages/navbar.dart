@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
-import 'package:setup_app/pages/new_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
+import 'package:setup_app/pages/statistics_page.dart';
 import 'package:setup_app/pages/your_profile.dart';
 
 class NavBar extends StatelessWidget {
@@ -17,14 +17,14 @@ class NavBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(user!.displayName!),
-            accountEmail: user.email != null ? Text(user.email!) : Text('You'),
-            currentAccountPicture: user.photoURL != null
+            accountName: Text(user?.displayName ?? 'No Name'),
+            accountEmail: Text(user?.email ?? 'No Email'),
+            currentAccountPicture: user?.photoURL != null
                 ? CircleAvatar(
-                    backgroundImage: NetworkImage(user.photoURL!),
+                    backgroundImage: NetworkImage(user!.photoURL!),
                   )
                 : const CircleAvatar(
-                    child: UserAvatar(size: 42.0),
+                    child: Icon(Icons.person),
                   ),
             decoration: BoxDecoration(color: Colors.blueGrey[800]),
           ),
@@ -48,10 +48,15 @@ class NavBar extends StatelessWidget {
               );
             },
           ),
-          const ListTile(
+          ListTile(
             leading: Icon(Icons.auto_graph),
             title: Text('Statistics'),
-            onTap: null,
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StatisticsPage()),
+              );
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),

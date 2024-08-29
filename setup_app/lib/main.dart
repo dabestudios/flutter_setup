@@ -1,7 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/auth/auth_gate.dart';
+import 'package:setup_app/model/routine_model.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'auth/firebase_options.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
@@ -36,8 +37,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<ThemeNotifier>(
-      create: (_) => _themeNotifier,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ThemeNotifier>(
+          create: (_) => _themeNotifier,
+        ),
+        ChangeNotifierProvider<RoutineModel>(
+          create: (_) => RoutineModel(),
+        ),
+      ],
       child: Consumer<ThemeNotifier>(
         builder: (context, theme, _) {
           return MaterialApp(

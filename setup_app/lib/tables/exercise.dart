@@ -12,7 +12,7 @@ class Exercise {
   final List<String> secondaryMuscles;
   final List<String> instructions;
   final String category;
-  final List<String> images;
+  final String? images;
 
   Exercise({
     required this.id,
@@ -40,7 +40,7 @@ class Exercise {
       secondaryMuscles: List<String>.from(json['secondaryMuscles']),
       instructions: List<String>.from(json['instructions']),
       category: json['category'],
-      images: List<String>.from(json['images']),
+      images: json['images'],
     );
   }
 }
@@ -57,7 +57,7 @@ class ExerciseLoader {
 
   Future<void> _loadExercises() async {
     final String response =
-        await rootBundle.loadString('assets/exercises.json');
+        await rootBundle.loadString('assets/exercises_actualizado.json');
     final List<dynamic> data = json.decode(response);
     _exercises = data.map((json) => Exercise.fromJson(json)).toList();
   }
