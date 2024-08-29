@@ -107,7 +107,7 @@ class WorkoutService {
   }
 
   // Método para cargar las rutinas
-  Future<void> _loadRoutinesStats() async {
+  Future<void> loadRoutinesStats() async {
     final file = await _getRoutineFile();
 
     try {
@@ -123,7 +123,7 @@ class WorkoutService {
   // Método para obtener las estadísticas de rutinas
   Future<List<Map<String, dynamic>>> getRoutineStats() async {
     if (_routineStats == null) {
-      await _loadRoutinesStats();
+      await loadRoutinesStats();
     }
     return _routineStats!;
   }

@@ -162,7 +162,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       await _workoutService.saveExerciseStats(exerciseStatsData);
     }
     _workoutService.loadExerciseStats();
-
+    _workoutService.loadRoutinesStats();
     // Si hay cambios, guarda la rutina en el almacenamiento local
     if (_hasChanges) {
       routine.exercises = _editableExercises;
