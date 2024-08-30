@@ -16,30 +16,34 @@ class _NewPageState extends State<NewPage> {
   bool _isAdsInitialized = false;
   List<Exercise> _selectedExercises = [];
   List<Exercise> _exercises = [];
+  List<Exercise> _filteredExercises = [];
   bool _isLoading = true;
   final ExerciseLoader _exerciseLoader = ExerciseLoader();
   Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
-  List<Exercise> _filteredExercises = [];
   Set<String> _muscleGroups = {};
+  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
     _loadData();
+    _searchController.addListener(() {
+      _filterExercises();
+    });
   }
 
   void _filterExercises() {
     setState(() {
-      if (_selectedMuscleGroups.isEmpty) {
-        _filteredExercises = _exercises;
-      } else {
-        _filteredExercises = _exercises.where((exercise) {
-          return exercise.primaryMuscles.any((muscle) {
-            return _selectedMuscleGroups.contains(muscle);
-          });
-        }).toList();
-      }
+      _filteredExercises = _exercises.where((exercise) {
+        final matchesName = exercise.name
+            .toLowerCase()
+            .contains(_searchController.text.toLowerCase());
+        final matchesMuscleGroups = _selectedMuscleGroups.isEmpty ||
+            exercise.primaryMuscles
+                .any((muscle) => _selectedMuscleGroups.contains(muscle));
+        return matchesName && matchesMuscleGroups;
+      }).toList();
     });
   }
 
@@ -150,6 +154,7 @@ class _NewPageState extends State<NewPage> {
                             _selectedMuscleGroups.remove(muscleGroup);
                           }
                         });
+                        _filterExercises();
                       },
                       selectedColor: Theme.of(context).colorScheme.primary,
                       backgroundColor: Colors.grey[200],
@@ -169,6 +174,7 @@ class _NewPageState extends State<NewPage> {
                   onPressed: () {
                     setState(() {
                       _selectedMuscleGroups.clear();
+                      _filterExercises();
                     });
                   },
                 ),
@@ -189,6 +195,7 @@ class _NewPageState extends State<NewPage> {
 
   @override
   void dispose() {
+    _searchController.dispose();
     _bannerAd?.dispose();
     super.dispose();
   }
@@ -205,6 +212,26 @@ class _NewPageState extends State<NewPage> {
             onPressed: _showFilterDialog,
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search exercises...',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+          ),
+        ),
       ),
       body: _isLoading
           ? const Center(
@@ -212,6 +239,7 @@ class _NewPageState extends State<NewPage> {
             )
           : Column(
               children: [
+                const SizedBox(height: 8.0),
                 Expanded(
                   child: GridView.builder(
                     gridDelegate:
