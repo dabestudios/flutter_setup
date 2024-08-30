@@ -18,9 +18,9 @@ class _NewPageState extends State<NewPage> {
   List<Exercise> _exercises = [];
   bool _isLoading = true;
   final ExerciseLoader _exerciseLoader = ExerciseLoader();
-  Set<String> _selectedMuscleGroups = {'All'};
+  Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
   List<Exercise> _filteredExercises = [];
-  Set<String> _muscleGroups = {'All'};
+  Set<String> _muscleGroups = {};
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _NewPageState extends State<NewPage> {
 
   void _filterExercises() {
     setState(() {
-      if (_selectedMuscleGroups.contains('All')) {
+      if (_selectedMuscleGroups.isEmpty) {
         _filteredExercises = _exercises;
       } else {
         _filteredExercises = _exercises.where((exercise) {
@@ -116,6 +116,77 @@ class _NewPageState extends State<NewPage> {
     );
   }
 
+  void _showFilterDialog() async {
+    final selectedGroups = Set<String>.from(_selectedMuscleGroups);
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Select Muscle Groups'),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Wrap(
+                  spacing: 8.0, // Espacio horizontal entre chips
+                  runSpacing: 4.0, // Espacio vertical entre chips
+                  children: _muscleGroups.map((String muscleGroup) {
+                    final isSelected =
+                        _selectedMuscleGroups.contains(muscleGroup);
+                    return FilterChip(
+                      label: Text(
+                        muscleGroup,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      selected: isSelected,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedMuscleGroups.add(muscleGroup);
+                          } else {
+                            _selectedMuscleGroups.remove(muscleGroup);
+                          }
+                        });
+                      },
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Colors.grey[200],
+                      showCheckmark: false, // Oculta el checkmark
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: EdgeInsets
+                          .zero, // Ajusta el padding para que no haya espacio extra
+                    );
+                  }).toList(),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Reset'),
+                  onPressed: () {
+                    setState(() {
+                      _selectedMuscleGroups.clear();
+                    });
+                  },
+                ),
+                TextButton(
+                  child: const Text('Apply'),
+                  onPressed: () {
+                    _filterExercises();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _bannerAd?.dispose();
@@ -128,37 +199,10 @@ class _NewPageState extends State<NewPage> {
       appBar: AppBar(
         title: const Text('Create Routine'),
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (String muscleGroup) {
-              setState(() {
-                if (muscleGroup == 'All') {
-                  _selectedMuscleGroups = {'All'};
-                } else {
-                  if (_selectedMuscleGroups.contains('All')) {
-                    _selectedMuscleGroups.remove('All');
-                  }
-                  if (_selectedMuscleGroups.contains(muscleGroup)) {
-                    _selectedMuscleGroups.remove(muscleGroup);
-                    if (_selectedMuscleGroups.isEmpty) {
-                      _selectedMuscleGroups.add('All');
-                    }
-                  } else {
-                    _selectedMuscleGroups.add(muscleGroup);
-                  }
-                }
-                _filterExercises();
-              });
-            },
-            itemBuilder: (BuildContext context) {
-              return _muscleGroups.map((String muscleGroup) {
-                return PopupMenuItem<String>(
-                  value: muscleGroup,
-                  child: Text(muscleGroup),
-                );
-              }).toList();
-            },
+          IconButton(
             icon: const Icon(Icons.filter_list),
             tooltip: 'Filter by muscle group',
+            onPressed: _showFilterDialog,
           ),
         ],
       ),
