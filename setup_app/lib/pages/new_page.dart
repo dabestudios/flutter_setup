@@ -16,14 +16,31 @@ class _NewPageState extends State<NewPage> {
   bool _isAdsInitialized = false;
   List<Exercise> _selectedExercises = [];
   List<Exercise> _exercises = [];
-  bool _isLoading = true; // Estado de carga inicializado a true
+  bool _isLoading = true;
   final ExerciseLoader _exerciseLoader = ExerciseLoader();
+  Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
+  List<Exercise> _filteredExercises = [];
+  Set<String> _muscleGroups = {};
 
   @override
   void initState() {
     super.initState();
     _initGoogleMobileAds();
-    _loadData(); // Iniciar la carga de los ejercicios
+    _loadData();
+  }
+
+  void _filterExercises() {
+    setState(() {
+      if (_selectedMuscleGroups.isEmpty) {
+        _filteredExercises = _exercises;
+      } else {
+        _filteredExercises = _exercises.where((exercise) {
+          return exercise.primaryMuscles.any((muscle) {
+            return _selectedMuscleGroups.contains(muscle);
+          });
+        }).toList();
+      }
+    });
   }
 
   Future<void> _initGoogleMobileAds() async {
@@ -54,13 +71,21 @@ class _NewPageState extends State<NewPage> {
   }
 
   Future<void> _loadData() async {
-    // Cargar los ejercicios usando el singleton ExerciseLoader
     final exercises = await _exerciseLoader.getExercises();
     setState(() {
       _exercises = exercises;
-      _isLoading =
-          false; // Cuando los datos estén listos, dejar de mostrar la espera
+      _filteredExercises = exercises;
+      _muscleGroups.addAll(_extractMuscleGroups(exercises));
+      _isLoading = false;
     });
+  }
+
+  Set<String> _extractMuscleGroups(List<Exercise> exercises) {
+    final muscleGroups = <String>{};
+    for (var exercise in exercises) {
+      muscleGroups.addAll(exercise.primaryMuscles);
+    }
+    return muscleGroups;
   }
 
   void _toggleExerciseSelection(Exercise exercise) {
@@ -71,6 +96,10 @@ class _NewPageState extends State<NewPage> {
         _selectedExercises.add(exercise);
       }
     });
+  }
+
+  bool _isSelected(Exercise exercise) {
+    return _selectedExercises.any((selected) => selected.id == exercise.id);
   }
 
   void _createRoutine() {
@@ -87,6 +116,77 @@ class _NewPageState extends State<NewPage> {
     );
   }
 
+  void _showFilterDialog() async {
+    final selectedGroups = Set<String>.from(_selectedMuscleGroups);
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Select Muscle Groups'),
+              content: SizedBox(
+                width: double.maxFinite,
+                child: Wrap(
+                  spacing: 8.0, // Espacio horizontal entre chips
+                  runSpacing: 4.0, // Espacio vertical entre chips
+                  children: _muscleGroups.map((String muscleGroup) {
+                    final isSelected =
+                        _selectedMuscleGroups.contains(muscleGroup);
+                    return FilterChip(
+                      label: Text(
+                        muscleGroup,
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black,
+                        ),
+                      ),
+                      selected: isSelected,
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedMuscleGroups.add(muscleGroup);
+                          } else {
+                            _selectedMuscleGroups.remove(muscleGroup);
+                          }
+                        });
+                      },
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: Colors.grey[200],
+                      showCheckmark: false, // Oculta el checkmark
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      padding: EdgeInsets
+                          .zero, // Ajusta el padding para que no haya espacio extra
+                    );
+                  }).toList(),
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Reset'),
+                  onPressed: () {
+                    setState(() {
+                      _selectedMuscleGroups.clear();
+                    });
+                  },
+                ),
+                TextButton(
+                  child: const Text('Apply'),
+                  onPressed: () {
+                    _filterExercises();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _bannerAd?.dispose();
@@ -98,22 +198,20 @@ class _NewPageState extends State<NewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Routine'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            tooltip: 'Filter by muscle group',
+            onPressed: _showFilterDialog,
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(
-              child:
-                  CircularProgressIndicator(), // Mostrar rueda de espera si está cargando
+              child: CircularProgressIndicator(),
             )
           : Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: const Text(
-                    'Select Exercises',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ),
-                const SizedBox(height: 16.0),
                 Expanded(
                   child: GridView.builder(
                     gridDelegate:
@@ -123,10 +221,10 @@ class _NewPageState extends State<NewPage> {
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    itemCount: _exercises.length,
+                    itemCount: _filteredExercises.length,
                     itemBuilder: (context, index) {
-                      final exercise = _exercises[index];
-                      final isSelected = _selectedExercises.contains(exercise);
+                      final exercise = _filteredExercises[index];
+                      final isSelected = _isSelected(exercise);
                       return GestureDetector(
                         onTap: () => _toggleExerciseSelection(exercise),
                         child: Container(
@@ -147,21 +245,18 @@ class _NewPageState extends State<NewPage> {
                           ),
                           child: Column(
                             children: [
-                              // Imagen en la parte superior
                               exercise.images != null
                                   ? Image.asset(
                                       'assets/photos/${exercise.images}',
-                                      height:
-                                          40, // Ajusta el tamaño según sea necesario
+                                      height: 40,
                                       width: double.infinity,
                                     )
                                   : Container(
-                                      height:
-                                          100, // Tamaño de placeholder si no hay imagen
+                                      height: 100,
                                       color: Colors.grey,
-                                      child: Center(child: Text('No Image')),
+                                      child:
+                                          const Center(child: Text('No Image')),
                                     ),
-                              // Contenido debajo de la imagen
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -228,12 +323,12 @@ class _NewPageState extends State<NewPage> {
               padding: const EdgeInsets.all(16.0),
               child: Text(
                 '${_selectedExercises.length} Exercises Selected',
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
             if (_selectedExercises.isNotEmpty)
               TextButton(
-                child: Text('Save Routine'),
+                child: const Text('Save Routine'),
                 onPressed: _createRoutine,
               ),
           ],
