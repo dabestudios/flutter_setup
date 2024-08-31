@@ -59,8 +59,9 @@ class MyApp extends StatelessWidget {
                 localizationsDelegates: Locales.delegates,
                 supportedLocales: Locales.supportedLocales,
                 locale: locale,
-                theme: FlexThemeData.light(scheme: FlexScheme.bigStone),
-                darkTheme: FlexThemeData.dark(scheme: FlexScheme.bigStone),
+                theme: FlexThemeData.light(
+                    scheme: FlexScheme.deepBlue), //brandBlue
+                darkTheme: FlexThemeData.dark(scheme: FlexScheme.deepBlue),
                 themeMode: theme.themeMode, // Usar el tema actual
                 home: const AuthGate(),
               );

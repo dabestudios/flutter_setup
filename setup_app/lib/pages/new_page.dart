@@ -210,26 +210,6 @@ class _NewPageState extends State<NewPage> {
             onPressed: _showFilterDialog,
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(50.0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: Locales.string(context, 'search_exercises'),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                prefixIcon: const Icon(Icons.search),
-              ),
-            ),
-          ),
-        ),
       ),
       body: _isLoading
           ? const Center(
@@ -237,6 +217,29 @@ class _NewPageState extends State<NewPage> {
             )
           : Column(
               children: [
+                const SizedBox(height: 8.0),
+                PreferredSize(
+                  preferredSize: const Size.fromHeight(50.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: Locales.string(context, 'search_exercises'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.1),
+                        prefixIcon: const Icon(Icons.search),
+                      ),
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 8.0),
                 Expanded(
                   child: GridView.builder(
@@ -303,6 +306,9 @@ class _NewPageState extends State<NewPage> {
                                                   .onSurface,
                                         ),
                                         textAlign: TextAlign.center,
+                                        maxLines: 2, // Limita a una línea
+                                        overflow: TextOverflow
+                                            .ellipsis, // Usa puntos suspensivos si es necesario
                                       ),
                                       const SizedBox(height: 8.0),
                                       Text(
@@ -319,6 +325,9 @@ class _NewPageState extends State<NewPage> {
                                               : Colors.grey,
                                         ),
                                         textAlign: TextAlign.center,
+                                        maxLines: 1, // Limita a dos líneas
+                                        overflow: TextOverflow
+                                            .ellipsis, // Usa puntos suspensivos si es necesario
                                       ),
                                     ],
                                   ),

@@ -217,10 +217,14 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Exercise: ${exercise.exerciseId}',
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                    Expanded(
+                      child: Text(
+                        exercise.exerciseId,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                     PopupMenuButton<String>(
                       onSelected: (value) {
