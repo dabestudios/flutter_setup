@@ -1,4 +1,20 @@
 {
     "create_routine": "Crear routina",
-    "start_routine": "Empezar rutina"
+    "start_routine": "Empezar rutina",
+    "app_name": "Workout Tracker",
+    "welcome_sign_in": "Welcome to Workout Tracker, please sign in!",
+    "welcome_sign_up": "Welcome to Workout Tracker, please sign up!",
+    "terms_and_conditions": "By signing in, you agree to our terms and conditions.",
+    "force_label": "Fuerza",
+    "level_label": "Nivel",
+    "mechanic_label": "Mecánica",
+    "equipment_label": "Equipo",
+    "primary_muscles_label": "Músculos Primarios",
+    "secondary_muscles_label": "Músculos Secundarios",
+    "category_label": "Categoría",
+    "instructions_label": "Instrucciones",
+    "images_label": "Imágenes",
+    "no_value": "N/A",
+    "no_images_available": "No hay imágenes disponibles",
+    "close": "Cerrar"
 }
