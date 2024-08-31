@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
 import 'package:setup_app/pages/review_and_edit_routine.dart';
@@ -127,7 +128,7 @@ class _NewPageState extends State<NewPage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Select Muscle Groups'),
+              title: Text(Locales.string(context, 'select_muscle_groups')),
               content: SizedBox(
                 width: double.maxFinite,
                 child: Wrap(
@@ -168,7 +169,7 @@ class _NewPageState extends State<NewPage> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('Reset'),
+                  child: Text(Locales.string(context, 'reset')),
                   onPressed: () {
                     setState(() {
                       _selectedMuscleGroups.clear();
@@ -177,7 +178,7 @@ class _NewPageState extends State<NewPage> {
                   },
                 ),
                 TextButton(
-                  child: const Text('Apply'),
+                  child: Text(Locales.string(context, 'apply')),
                   onPressed: () {
                     _filterExercises();
                     Navigator.of(context).pop();
@@ -202,11 +203,10 @@ class _NewPageState extends State<NewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Routine'),
+        title: Text(Locales.string(context, 'create_routine')),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
-            tooltip: 'Filter by muscle group',
             onPressed: _showFilterDialog,
           ),
         ],
@@ -217,7 +217,7 @@ class _NewPageState extends State<NewPage> {
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search exercises...',
+                hintText: Locales.string(context, 'search_exercises'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: BorderSide.none,
@@ -308,7 +308,8 @@ class _NewPageState extends State<NewPage> {
                                       Text(
                                         exercise.primaryMuscles.isNotEmpty
                                             ? exercise.primaryMuscles.join(', ')
-                                            : 'No muscles info',
+                                            : Locales.string(
+                                                context, 'no_muscles_info'),
                                         style: TextStyle(
                                           fontSize: 14,
                                           color: isSelected
@@ -348,14 +349,13 @@ class _NewPageState extends State<NewPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${_selectedExercises.length} Exercises Selected',
-                style: const TextStyle(fontSize: 16),
+                '${Locales.string(context, 'exercises_selected')}: ${_selectedExercises.length}',
               ),
             ),
             if (_selectedExercises.isNotEmpty)
               TextButton(
                 onPressed: _createRoutine,
-                child: const Text('Save Routine'),
+                child: Text(Locales.string(context, 'save_routine')),
               ),
           ],
         ),

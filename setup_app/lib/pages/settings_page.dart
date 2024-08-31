@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:setup_app/main.dart';
 
@@ -9,12 +10,12 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(Locales.string(context, 'settings')),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: const Text('Dark Mode'),
+            title: Text(Locales.string(context, 'dark_mode')),
             trailing: Consumer<ThemeNotifier>(
               builder: (context, notifier, child) {
                 // Determinar si el sistema está en modo oscuro
@@ -44,15 +45,15 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text('Option 1'),
-            subtitle: const Text('Description for option 1'),
+            title: Text(Locales.string(context, 'option_1')),
+            subtitle: Text(Locales.string(context, 'description_option_1')),
             onTap: () {
               // Funcionalidad futura
             },
           ),
           ListTile(
-            title: const Text('Option 2'),
-            subtitle: const Text('Description for option 2'),
+            title: Text(Locales.string(context, 'option_2')),
+            subtitle: Text(Locales.string(context, 'description_option_2')),
             onTap: () {
               // Funcionalidad futura
             },

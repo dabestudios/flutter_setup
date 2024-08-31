@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Asegúrate de importar flutter_locales
 import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
 import 'package:setup_app/pages/statistics_page.dart';
@@ -16,8 +17,8 @@ class NavBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: [
           UserAccountsDrawerHeader(
-            accountName: Text(user?.displayName ?? 'No Name'),
-            accountEmail: Text(user?.email ?? 'No Email'),
+            accountName: Text(user?.displayName ?? ''),
+            accountEmail: Text(user?.email ?? ''),
             currentAccountPicture: user?.photoURL != null
                 ? CircleAvatar(
                     backgroundImage: NetworkImage(user!.photoURL!),
@@ -29,7 +30,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.person),
-            title: const Text('Profile'),
+            title: Text(Locales.string(context, 'profile')), // Traducción
             onTap: () {
               Navigator.push(
                 context,
@@ -40,7 +41,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.home),
-            title: const Text('Home'),
+            title: Text(Locales.string(context, 'home')), // Traducción
             onTap: () {
               Navigator.push(
                 context,
@@ -50,7 +51,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.auto_graph),
-            title: const Text('Statistics'),
+            title: Text(Locales.string(context, 'statistics')), // Traducción
             onTap: () {
               Navigator.push(
                 context,
@@ -60,7 +61,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
+            title: Text(Locales.string(context, 'settings')), // Traducción
             onTap: () {
               Navigator.push(
                 context,
@@ -70,7 +71,7 @@ class NavBar extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.logout),
-            title: const Text('Close'),
+            title: Text(Locales.string(context, 'close')), // Traducción
             onTap: () {
               Navigator.pop(context);
             },

@@ -1,5 +1,5 @@
-// review_and_edit_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; 
 import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
@@ -11,8 +11,11 @@ class ReviewAndEditPage extends StatefulWidget {
   final List<Exercise> selectedExercises;
   final void Function(Routine routine) onSave;
 
-  const ReviewAndEditPage(
-      {super.key, required this.selectedExercises, required this.onSave});
+  const ReviewAndEditPage({
+    super.key,
+    required this.selectedExercises,
+    required this.onSave,
+  });
 
   @override
   State<ReviewAndEditPage> createState() => _ReviewAndEditPageState();
@@ -100,7 +103,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Review and Edit Routine'),
+        title: Text(
+            Locales.string(context, 'review_and_edit_routine')), // Traducción
         backgroundColor: theme.appBarTheme.backgroundColor,
       ),
       body: Padding(
@@ -110,14 +114,15 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
           children: [
             TextField(
               controller: _routineNameController,
-              decoration: const InputDecoration(
-                labelText: 'Routine Name',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText:
+                    Locales.string(context, 'routine_name'), // Traducción
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Selected Exercises:',
+            Text(
+              Locales.string(context, 'selected_exercises'), // Traducción
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -129,7 +134,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                   return ExpansionTile(
                     title: Text(exercise.name),
                     subtitle: Text(
-                        '${routineExercise.repetitions.length} series of ${routineExercise.repetitions.join(", ")} reps'),
+                        '${routineExercise.repetitions.length} series of ${routineExercise.repetitions.join(", ")} ${Locales.string(context, 'reps')}'), // Traducción
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
@@ -150,7 +155,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                                         onValueChanged: (newValue) =>
                                             _updateReps(
                                                 index, seriesIndex, newValue),
-                                        label: 'Reps',
+                                        label: Locales.string(
+                                            context, 'reps'), // Traducción
                                         isReps: true,
                                       ),
                                       const Spacer(),
@@ -160,7 +166,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                                         onValueChanged: (newValue) =>
                                             _updateWeight(
                                                 index, seriesIndex, newValue),
-                                        label: 'Kg',
+                                        label: Locales.string(
+                                            context, 'kg'), // Traducción
                                         isReps: false,
                                       ),
                                     ],
@@ -181,7 +188,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ElevatedButton(
                           onPressed: () => _addSeries(index),
-                          child: const Text('Add Series'),
+                          child: Text(Locales.string(
+                              context, 'add_series')), // Traducción
                         ),
                       ),
                     ],
@@ -192,7 +200,8 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isRoutineNameEmpty ? null : _saveRoutine,
-              child: const Text('Save Routine'),
+              child:
+                  Text(Locales.string(context, 'save_routine')), // Traducción
             ),
           ],
         ),

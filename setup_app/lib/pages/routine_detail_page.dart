@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Asegúrate de importar flutter_locales
 import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
@@ -51,7 +52,9 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
     }).catchError((error) {
       // Maneja el error si ocurre durante el guardado
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save routine: $error')),
+        SnackBar(
+            content: Text(
+                '${Locales.string(context, 'failed_to_save_routine')} $error')), // Traducción
       );
     });
   }
@@ -60,7 +63,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.routine.name),
+        title: Text(Locales.string(context, 'routine_detail')), // Traducción
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -74,20 +77,21 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Last updated: ${widget.routine.lastDate.toLocal()}',
+              '${Locales.string(context, 'last_updated')} ${widget.routine.lastDate.toLocal()}', // Traducción
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: _startWorkout, // Cambiar el método llamado aquí
-                child: const Text('Start Workout'),
+                onPressed: _startWorkout,
+                child: Text(
+                    Locales.string(context, 'start_workout')), // Traducción
               ),
             ),
             const SizedBox(height: 20),
-            const Text(
-              'Exercises:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              Locales.string(context, 'exercises'), // Traducción
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -100,15 +104,15 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                           key: ValueKey(entry.value),
                           margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
-                            title:
-                                Text('Exercise ID: ${entry.value.exerciseId}'),
+                            title: Text(
+                                '${Locales.string(context, 'exercise_id')}: ${entry.value.exerciseId}'), // Traducción
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Reps: ${entry.value.repetitions.join(", ")}'),
+                                    '${Locales.string(context, 'reps')}: ${entry.value.repetitions.join(", ")}'), // Traducción
                                 Text(
-                                    'Weights: ${entry.value.weights.join(", ")}'),
+                                    '${Locales.string(context, 'weights')}: ${entry.value.weights.join(", ")}'), // Traducción
                               ],
                             ),
                             trailing: IconButton(

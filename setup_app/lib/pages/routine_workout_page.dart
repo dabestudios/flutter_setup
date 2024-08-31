@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/model/routine_storage.dart';
@@ -41,7 +42,8 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       // Manejar el caso en el que no hay rutina disponible
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No routine found.')),
+          SnackBar(
+              content: Text(Locales.string(context, 'no_routine_available'))),
         );
         Navigator.pop(context);
       });
@@ -125,7 +127,8 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     if (routine == null) {
       // Manejar el caso en el que no hay rutina disponible
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('No routine found.')),
+        SnackBar(
+            content: Text(Locales.string(context, 'no_routine_available'))),
       );
       Navigator.pop(context);
       return;
@@ -190,17 +193,17 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     if (routine == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Error'),
+          title: Text(Locales.string(context, 'error')),
         ),
-        body: const Center(
-          child: Text('No routine available.'),
+        body: Center(
+          child: Text(Locales.string(context, 'no_routine_available')),
         ),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Workout  ${routine.name}'),
+        title: Text('${Locales.string(context, 'workout')} ${routine.name}'),
       ),
       body: ListView.builder(
         itemCount: _editableExercises.length,
@@ -233,21 +236,22 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'add_series',
-                          child: Text('Add Serie'),
+                          child: Text(Locales.string(context, 'add_serie')),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'remove_exercise',
-                          child: Text('Remove Exercise'),
+                          child:
+                              Text(Locales.string(context, 'remove_exercise')),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'remove_serie',
-                          child: Text('Remove Serie'),
+                          child: Text(Locales.string(context, 'remove_serie')),
                         ),
-                        const PopupMenuItem<String>(
+                        PopupMenuItem<String>(
                           value: 'info',
-                          child: Text('Info'),
+                          child: Text(Locales.string(context, 'info')),
                         ),
                       ],
                     ),
@@ -271,9 +275,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'Serie',
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              Locales.string(context, 'serie'),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
@@ -281,9 +285,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'Kg',
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              Locales.string(context, 'kg'),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
@@ -291,9 +295,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'Reps',
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              Locales.string(context, 'reps'),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
@@ -301,9 +305,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: const Text(
-                              'Confirm',
-                              style: TextStyle(color: Colors.white),
+                            child: Text(
+                              Locales.string(context, 'confirm'),
+                              style: const TextStyle(color: Colors.white),
                             ),
                           ),
                         ),
@@ -324,7 +328,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                               alignment: Alignment.centerLeft,
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
-                                'Serie ${seriesIndex + 1}',
+                                '${Locales.string(context, 'serie')} ${seriesIndex + 1}',
                               ),
                             ),
                           ),
@@ -418,7 +422,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 foregroundColor: Theme.of(context).appBarTheme.backgroundColor,
               ),
               onPressed: _finishWorkout,
-              child: const Text('Finished'),
+              child: Text(Locales.string(context, 'finished')),
             ),
           ],
         ),

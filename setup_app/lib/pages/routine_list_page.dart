@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Asegúrate de importar flutter_locales
 import 'package:setup_app/pages/routine_detail_page.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
@@ -25,7 +26,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Routines'),
+        title: Text(Locales.string(context, 'my_routines')), // Traducción
         actions: [
           IconButton(
             icon: const Icon(Icons.add),
@@ -47,7 +48,9 @@ class _RoutineListPageState extends State<RoutineListPage> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No routines found.'));
+            return Center(
+                child: Text(Locales.string(
+                    context, 'no_routines_found'))); // Traducción
           }
 
           final routines = snapshot.data!;
@@ -76,8 +79,9 @@ class _RoutineListPageState extends State<RoutineListPage> {
                       style: const TextStyle(
                           fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    subtitle:
-                        Text('Last updated: ${routine.lastDate.toLocal()}'),
+                    subtitle: Text(
+                      '${Locales.string(context, 'last_updated')} ${routine.lastDate.toLocal()}', // Traducción
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.edit),
                       onPressed: () {

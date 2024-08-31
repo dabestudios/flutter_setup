@@ -4,21 +4,6 @@ import 'package:setup_app/pages/navbar.dart';
 import 'package:setup_app/pages/new_page.dart';
 import 'package:setup_app/pages/routine_list_page.dart';
 
-class WorkoutApp extends StatelessWidget {
-  const WorkoutApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Workout App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
-    );
-  }
-}
-
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -27,7 +12,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       drawer: const NavBar(),
       appBar: AppBar(
-        title: const Text('Workout App'),
+        title: const LocaleText('app_name'),
       ),
       body: Center(
         child: Column(

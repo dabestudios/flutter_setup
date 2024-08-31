@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Importa flutter_locales
 
 class YourProfileScreen extends StatelessWidget {
   const YourProfileScreen({super.key});
@@ -9,15 +10,17 @@ class YourProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Profile'),
+        title: Text(Locales.string(
+            context, 'your_profile')), // Usa la clave de traducción
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              'User Profile',
-              style: TextStyle(fontSize: 24),
+            Text(
+              Locales.string(
+                  context, 'user_profile'), // Usa la clave de traducción
+              style: const TextStyle(fontSize: 24),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -29,7 +32,8 @@ class YourProfileScreen extends StatelessWidget {
                   Navigator.of(context).popUntil((route) => route.isFirst);
                 });
               },
-              child: const Text('Logout'),
+              child: Text(Locales.string(
+                  context, 'logout')), // Usa la clave de traducción
             ),
           ],
         ),
