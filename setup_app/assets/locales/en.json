@@ -62,5 +62,17 @@
     "description_option_2": "Description for option 2",
     "your_profile": "Your Profile",
     "user_profile": "User Profile",
-    "logout": "Logout"
+    "logout": "Logout",
+    "no_statistics": "No statistics saved.",
+    "routine_statistics": "Routine Statistics",
+    "exercise_statistics": "Exercise Statistics",
+    "last_date": "Last Date",
+    "exercise_count": "Number of Exercises",
+    "exercise": "Exercise",
+    "repetitions": "Repetitions",
+    "completed": "Completed",
+    "yes": "Yes",
+    "no": "No",
+    "no_name": "No Name",
+    "date": "Date"
 }

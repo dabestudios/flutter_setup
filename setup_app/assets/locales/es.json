@@ -62,5 +62,17 @@
     "description_option_2": "Descripción para la opción 2",
     "your_profile": "Tu Perfil",
     "user_profile": "Perfil de Usuario",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "no_statistics": "No hay estadísticas guardadas.",
+    "routine_statistics": "Estadísticas de Rutinas",
+    "exercise_statistics": "Estadísticas de Ejercicios",
+    "last_date": "Última Fecha",
+    "exercise_count": "Número de Ejercicios",
+    "exercise": "Ejercicio",
+    "repetitions": "Repeticiones",
+    "completed": "Completado",
+    "yes": "Sí",
+    "no": "No",
+    "no_name": "Sin Nombre",
+    "date": "Fecha"
 }
