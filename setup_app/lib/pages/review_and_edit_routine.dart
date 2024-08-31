@@ -1,5 +1,4 @@
 // review_and_edit_page.dart
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/tables/exercise.dart';
@@ -12,7 +11,8 @@ class ReviewAndEditPage extends StatefulWidget {
   final List<Exercise> selectedExercises;
   final void Function(Routine routine) onSave;
 
-  ReviewAndEditPage({required this.selectedExercises, required this.onSave});
+  const ReviewAndEditPage(
+      {super.key, required this.selectedExercises, required this.onSave});
 
   @override
   _ReviewAndEditPageState createState() => _ReviewAndEditPageState();
@@ -90,7 +90,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
     if (!mounted) return;
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
@@ -110,13 +110,13 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
           children: [
             TextField(
               controller: _routineNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Routine Name',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               'Selected Exercises:',
             ),
             const SizedBox(height: 10),
@@ -133,7 +133,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                     children: [
                       ListView.builder(
                         shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
+                        physics: const NeverScrollableScrollPhysics(),
                         itemCount: routineExercise.repetitions.length,
                         itemBuilder: (context, seriesIndex) {
                           return Padding(
@@ -181,7 +181,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
                         padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: ElevatedButton(
                           onPressed: () => _addSeries(index),
-                          child: Text('Add Series'),
+                          child: const Text('Add Series'),
                         ),
                       ),
                     ],
@@ -192,7 +192,7 @@ class _ReviewAndEditPageState extends State<ReviewAndEditPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _isRoutineNameEmpty ? null : _saveRoutine,
-              child: Text('Save Routine'),
+              child: const Text('Save Routine'),
             ),
           ],
         ),

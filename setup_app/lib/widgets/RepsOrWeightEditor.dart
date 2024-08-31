@@ -6,7 +6,8 @@ class RepsOrWeightEditor extends StatelessWidget {
   final String label;
   final bool isReps;
 
-  RepsOrWeightEditor({
+  const RepsOrWeightEditor({
+    super.key,
     required this.value,
     required this.onValueChanged,
     required this.label,
@@ -24,7 +25,7 @@ class RepsOrWeightEditor extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              icon: Icon(Icons.remove, size: 15),
+              icon: const Icon(Icons.remove, size: 15),
               onPressed: () {
                 if (value > 0) {
                   onValueChanged(value - 1);
@@ -36,7 +37,7 @@ class RepsOrWeightEditor extends StatelessWidget {
               child: Stack(
                 children: [
                   Column(children: [
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Align(
                       alignment: Alignment.center,
                       child: Text(
@@ -49,7 +50,7 @@ class RepsOrWeightEditor extends StatelessWidget {
                     ),
                     TextField(
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         border: InputBorder.none,
                         alignLabelWithHint: true,
                       ),
@@ -58,18 +59,18 @@ class RepsOrWeightEditor extends StatelessWidget {
                         onValueChanged(intValue);
                       },
                       controller: TextEditingController(
-                        text: this.value.toString(),
+                        text: value.toString(),
                       ),
                       textAlign: TextAlign.center,
-                      style:
-                          TextStyle(fontSize: 22), // Tamaño del texto principal
+                      style: const TextStyle(
+                          fontSize: 22), // Tamaño del texto principal
                     ),
                   ]),
                 ],
               ),
             ),
             IconButton(
-              icon: Icon(Icons.add, size: 15),
+              icon: const Icon(Icons.add, size: 15),
               onPressed: () {
                 onValueChanged(value + 1);
               },

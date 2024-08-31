@@ -14,12 +14,14 @@ class WorkoutApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: const HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +52,8 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => RoutineListPage()),
+                  MaterialPageRoute(
+                      builder: (context) => const RoutineListPage()),
                 );
               },
               style: ElevatedButton.styleFrom(

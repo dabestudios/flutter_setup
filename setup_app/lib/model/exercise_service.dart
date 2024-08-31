@@ -32,22 +32,23 @@ class ExerciseService {
                     'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
                 Text('Category: ${exercise.category}'),
                 const SizedBox(height: 10),
-                Text('Instructions:',
+                const Text('Instructions:',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 for (var instruction in exercise.instructions)
                   Text('- $instruction'),
                 const SizedBox(height: 10),
-                Text('Images:', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text('Images:',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
                 if (exercise.images != null)
                   Image.asset('assets/photos/${exercise.images}')
                 else
-                  Text('No images available'),
+                  const Text('No images available'),
               ],
             ),
           ),
           actions: [
             TextButton(
-              child: Text('Close'),
+              child: const Text('Close'),
               onPressed: () {
                 Navigator.of(context).pop();
               },

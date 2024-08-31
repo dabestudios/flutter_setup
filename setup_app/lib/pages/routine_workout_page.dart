@@ -5,11 +5,12 @@ import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/model/routine_storage.dart';
 import 'package:setup_app/model/work_out_service.dart';
 import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
-import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class RoutineWorkoutPage extends StatefulWidget {
+  const RoutineWorkoutPage({super.key});
+
   @override
   _RoutineWorkoutPageState createState() => _RoutineWorkoutPageState();
 }
@@ -39,7 +40,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       // Manejar el caso en el que no hay rutina disponible
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('No routine found.')),
+          const SnackBar(content: Text('No routine found.')),
         );
         Navigator.pop(context);
       });
@@ -60,7 +61,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_seconds < 59) {
           _seconds++;
@@ -123,7 +124,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     if (routine == null) {
       // Manejar el caso en el que no hay rutina disponible
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('No routine found.')),
+        const SnackBar(content: Text('No routine found.')),
       );
       Navigator.pop(context);
       return;
@@ -185,9 +186,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     if (routine == null) {
       return Scaffold(
         appBar: AppBar(
-          title: Text('Error'),
+          title: const Text('Error'),
         ),
-        body: Center(
+        body: const Center(
           child: Text('No routine available.'),
         ),
       );
@@ -210,8 +211,8 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                   children: [
                     Text(
                       'Exercise: ${exercise.exerciseId}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     PopupMenuButton<String>(
                       onSelected: (value) {
@@ -228,19 +229,19 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                       },
                       itemBuilder: (BuildContext context) =>
                           <PopupMenuEntry<String>>[
-                        PopupMenuItem<String>(
+                        const PopupMenuItem<String>(
                           value: 'add_series',
                           child: Text('Add Serie'),
                         ),
-                        PopupMenuItem<String>(
+                        const PopupMenuItem<String>(
                           value: 'remove_exercise',
                           child: Text('Remove Exercise'),
                         ),
-                        PopupMenuItem<String>(
+                        const PopupMenuItem<String>(
                           value: 'remove_serie',
                           child: Text('Remove Serie'),
                         ),
-                        PopupMenuItem<String>(
+                        const PopupMenuItem<String>(
                           value: 'info',
                           child: Text('Info'),
                         ),
@@ -248,9 +249,9 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
                 Table(
-                  columnWidths: {
+                  columnWidths: const {
                     0: FlexColumnWidth(2),
                     1: FlexColumnWidth(2),
                     2: FlexColumnWidth(2),
@@ -266,7 +267,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            child: const Text(
                               'Serie',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -276,7 +277,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            child: const Text(
                               'Kg',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -286,7 +287,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            child: const Text(
                               'Reps',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -296,7 +297,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                           child: Container(
                             alignment: Alignment.center,
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(
+                            child: const Text(
                               'Confirm',
                               style: TextStyle(color: Colors.white),
                             ),
@@ -339,7 +340,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                                 },
                                 controller: TextEditingController(
                                     text: '${exercise.weights[seriesIndex]}'),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder
                                       .none, // Elimina la línea debajo del campo
                                 ),
@@ -363,7 +364,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                                 controller: TextEditingController(
                                     text:
                                         '${exercise.repetitions[seriesIndex]}'),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: InputBorder
                                       .none, // Elimina la línea debajo del campo
                                 ),
@@ -413,7 +414,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
                 foregroundColor: Theme.of(context).appBarTheme.backgroundColor,
               ),
               onPressed: _finishWorkout,
-              child: Text('Finished'),
+              child: const Text('Finished'),
             ),
           ],
         ),

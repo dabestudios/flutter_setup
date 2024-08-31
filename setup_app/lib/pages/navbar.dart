@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/pages/settings_page.dart';
@@ -34,7 +33,8 @@ class NavBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => YourProfileScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const YourProfileScreen()),
               );
             },
           ),
@@ -44,13 +44,13 @@ class NavBar extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomePage()),
+                MaterialPageRoute(builder: (context) => const HomePage()),
               );
             },
           ),
           ListTile(
-            leading: Icon(Icons.auto_graph),
-            title: Text('Statistics'),
+            leading: const Icon(Icons.auto_graph),
+            title: const Text('Statistics'),
             onTap: () {
               Navigator.push(
                 context,
@@ -59,8 +59,8 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
             onTap: () {
               Navigator.push(
                 context,

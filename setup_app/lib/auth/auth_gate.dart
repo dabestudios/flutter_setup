@@ -20,8 +20,8 @@ class AuthGate extends StatelessWidget {
               GoogleProvider(clientId: clientId),
             ],
             headerBuilder: (context, constraints, shrinkOffset) {
-              return Padding(
-                padding: const EdgeInsets.all(20),
+              return const Padding(
+                padding: EdgeInsets.all(20),
                 child: Text(
                   'FlutterFire',
                 ),
@@ -47,7 +47,7 @@ class AuthGate extends StatelessWidget {
           );
         }
 
-        return HomePage();
+        return const HomePage();
       },
     );
   }

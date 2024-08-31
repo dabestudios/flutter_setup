@@ -4,6 +4,8 @@ import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineListPage extends StatefulWidget {
+  const RoutineListPage({super.key});
+
   @override
   _RoutineListPageState createState() => _RoutineListPageState();
 }
@@ -26,7 +28,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
         title: const Text('My Routines'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               // Agrega una nueva rutina (implementar esta funcionalidad)
             },
@@ -37,7 +39,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
         future: _routinesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -45,7 +47,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No routines found.'));
+            return const Center(child: Text('No routines found.'));
           }
 
           final routines = snapshot.data!;
@@ -64,19 +66,20 @@ class _RoutineListPageState extends State<RoutineListPage> {
                   );
                 },
                 child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: ListTile(
-                    contentPadding: EdgeInsets.all(16.0),
-                    leading: Icon(Icons.fitness_center, size: 40),
+                    contentPadding: const EdgeInsets.all(16.0),
+                    leading: const Icon(Icons.fitness_center, size: 40),
                     title: Text(
                       routine.name,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                     subtitle:
                         Text('Last updated: ${routine.lastDate.toLocal()}'),
                     trailing: IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         // Navega a la pantalla de edición
                       },

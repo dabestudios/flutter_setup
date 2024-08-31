@@ -14,13 +14,13 @@ class NewPage extends StatefulWidget {
 class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
-  List<Exercise> _selectedExercises = [];
+  final List<Exercise> _selectedExercises = [];
   List<Exercise> _exercises = [];
   List<Exercise> _filteredExercises = [];
   bool _isLoading = true;
   final ExerciseLoader _exerciseLoader = ExerciseLoader();
-  Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
-  Set<String> _muscleGroups = {};
+  final Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
+  final Set<String> _muscleGroups = {};
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -121,8 +121,6 @@ class _NewPageState extends State<NewPage> {
   }
 
   void _showFilterDialog() async {
-    final selectedGroups = Set<String>.from(_selectedMuscleGroups);
-
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -213,7 +211,7 @@ class _NewPageState extends State<NewPage> {
           ),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
+          preferredSize: const Size.fromHeight(50.0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: TextField(
@@ -227,7 +225,7 @@ class _NewPageState extends State<NewPage> {
                 filled: true,
                 fillColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
               ),
             ),
           ),
@@ -262,7 +260,7 @@ class _NewPageState extends State<NewPage> {
                                     .colorScheme
                                     .primary
                                     .withOpacity(0.5)
-                                : Theme.of(context).colorScheme.background,
+                                : Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(10.0),
                             border: Border.all(
                               color: isSelected
@@ -302,7 +300,7 @@ class _NewPageState extends State<NewPage> {
                                                   .onPrimary
                                               : Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground,
+                                                  .onSurface,
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -335,7 +333,7 @@ class _NewPageState extends State<NewPage> {
                 if (_bannerAd != null && _isAdsInitialized)
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Container(
+                    child: SizedBox(
                       width: _bannerAd!.size.width.toDouble(),
                       height: _bannerAd!.size.height.toDouble(),
                       child: AdWidget(ad: _bannerAd!),
@@ -356,8 +354,8 @@ class _NewPageState extends State<NewPage> {
             ),
             if (_selectedExercises.isNotEmpty)
               TextButton(
-                child: const Text('Save Routine'),
                 onPressed: _createRoutine,
+                child: const Text('Save Routine'),
               ),
           ],
         ),

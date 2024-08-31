@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:setup_app/model/work_out_service.dart';
 
 class StatisticsPage extends StatefulWidget {
+  const StatisticsPage({super.key});
+
   @override
   _StatisticsPageState createState() => _StatisticsPageState();
 }
@@ -40,15 +42,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
       child: ListTile(
         title: Text(
           routineName,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Text('Fecha de la última rutina: $lastDate'),
             Text('Número de ejercicios: $exerciseCount'),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: routine['exercises']?.map<Widget>((exercise) {
@@ -69,7 +71,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                           Text('Pesos: ${weights.join(", ")}'),
                           Text(
                               'Completado: ${completionStatus.map((status) => status ? "Sí" : "No").join(", ")}'),
-                          Divider(),
+                          const Divider(),
                         ],
                       ),
                     );
@@ -100,7 +102,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 Text('Pesos: ${stat['weights'].join(", ")}'),
                 Text(
                     'Completado: ${stat['completionStatus'].map((status) => status ? "Sí" : "No").join(", ")}'),
-                SizedBox(height: 8.0),
+                const SizedBox(height: 8.0),
               ],
             );
           }).toList(),
@@ -116,24 +118,22 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Estadísticas'),
+        title: const Text('Estadísticas'),
       ),
       body: _routines.isEmpty && _exerciseStats.isEmpty
-          ? Center(child: Text('No hay estadísticas guardadas.'))
+          ? const Center(child: Text('No hay estadísticas guardadas.'))
           : ListView(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Estadísticas de Rutinas',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ..._routines
-                    .map((routine) => _buildRoutineCard(routine))
-                    .toList(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
+                ..._routines.map((routine) => _buildRoutineCard(routine)),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
                   child: Text(
                     'Estadísticas de Ejercicios',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -142,7 +142,7 @@ class _StatisticsPageState extends State<StatisticsPage> {
                 ..._exerciseStats.entries.map((entry) {
                   return _buildExerciseStatsCard(
                       entry.key, List<dynamic>.from(entry.value['data']));
-                }).toList(),
+                }),
               ],
             ),
     );

@@ -9,7 +9,7 @@ import 'package:setup_app/tables/routine_exercise.dart';
 class RoutineDetailPage extends StatefulWidget {
   final Routine routine;
 
-  RoutineDetailPage({required this.routine});
+  const RoutineDetailPage({super.key, required this.routine});
 
   @override
   _RoutineDetailPageState createState() => _RoutineDetailPageState();
@@ -63,7 +63,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
         title: Text(widget.routine.name),
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {},
           ),
         ],
@@ -75,17 +75,17 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           children: [
             Text(
               'Last updated: ${widget.routine.lastDate.toLocal()}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 onPressed: _startWorkout, // Cambiar el método llamado aquí
-                child: Text('Start Workout'),
+                child: const Text('Start Workout'),
               ),
             ),
             const SizedBox(height: 20),
-            Text(
+            const Text(
               'Exercises:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
@@ -98,7 +98,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                     .entries
                     .map((entry) => Card(
                           key: ValueKey(entry.value),
-                          margin: EdgeInsets.symmetric(vertical: 8.0),
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
                             title:
                                 Text('Exercise ID: ${entry.value.exerciseId}'),
@@ -112,7 +112,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                               ],
                             ),
                             trailing: IconButton(
-                              icon: Icon(Icons.info_outline),
+                              icon: const Icon(Icons.info_outline),
                               onPressed: () {
                                 _exerciseService.showExerciseInfo(
                                     context, entry.value.exerciseId);
