@@ -137,6 +137,7 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
     // Prepara los datos de la rutina para guardar.
     Map<String, dynamic> routineData = {
       'name': routine.name,
+      'date': DateTime.now().toIso8601String(),
       'exercises': _editableExercises.map((exercise) {
         return {
           'exerciseId': exercise.exerciseId,

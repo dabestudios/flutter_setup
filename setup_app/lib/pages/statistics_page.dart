@@ -35,9 +35,8 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _buildRoutineCard(Map<String, dynamic> routine) {
-    String routineName = routine['name'] ?? Locales.string(context, 'no_name');
-    String lastDate =
-        routine['lastDate'] ?? Locales.string(context, 'last_date');
+    String routineName = routine['name'];
+    String lastDate = routine['date'];
     int exerciseCount = routine['exercises']?.length ?? 0;
 
     return Card(
