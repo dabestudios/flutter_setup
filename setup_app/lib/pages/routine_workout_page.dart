@@ -5,6 +5,7 @@ import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/model/routine_storage.dart';
 import 'package:setup_app/model/work_out_service.dart';
 import 'package:setup_app/model/routine_model.dart'; // Importar RoutineModel
+import 'package:setup_app/pages/home_page.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -12,7 +13,7 @@ class RoutineWorkoutPage extends StatefulWidget {
   const RoutineWorkoutPage({super.key});
 
   @override
-  _RoutineWorkoutPageState createState() => _RoutineWorkoutPageState();
+  State<RoutineWorkoutPage> createState() => _RoutineWorkoutPageState();
 }
 
 class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
@@ -169,8 +170,11 @@ class _RoutineWorkoutPageState extends State<RoutineWorkoutPage> {
       routine.exercises = _editableExercises;
       await routineStorage.replaceCurrentRoutine(routine);
     }
-    // Navega de vuelta o muestra un mensaje de éxito.
-    Navigator.pop(context);
+    if (!mounted) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const HomePage()),
+    );
   }
 
   void _stopTimer() {

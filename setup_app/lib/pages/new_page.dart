@@ -8,7 +8,7 @@ class NewPage extends StatefulWidget {
   const NewPage({super.key});
 
   @override
-  _NewPageState createState() => _NewPageState();
+  State<NewPage> createState() => _NewPageState();
 }
 
 class _NewPageState extends State<NewPage> {

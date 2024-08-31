@@ -13,6 +13,7 @@ class ExerciseService {
       return;
     }
 
+    if (!context.mounted) return; // Asegúrate de que el contexto esté montado
     showDialog(
       context: context,
       builder: (BuildContext context) {

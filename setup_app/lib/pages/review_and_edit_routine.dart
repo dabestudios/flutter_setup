@@ -5,7 +5,7 @@ import 'package:setup_app/tables/exercise.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/tables/routine_exercise.dart';
 import 'package:setup_app/model/routine_storage.dart';
-import 'package:setup_app/widgets/RepsOrWeightEditor.dart';
+import 'package:setup_app/widgets/reps_or_weight_editor.dart';
 
 class ReviewAndEditPage extends StatefulWidget {
   final List<Exercise> selectedExercises;
@@ -15,7 +15,7 @@ class ReviewAndEditPage extends StatefulWidget {
       {super.key, required this.selectedExercises, required this.onSave});
 
   @override
-  _ReviewAndEditPageState createState() => _ReviewAndEditPageState();
+  State<ReviewAndEditPage> createState() => _ReviewAndEditPageState();
 }
 
 class _ReviewAndEditPageState extends State<ReviewAndEditPage> {

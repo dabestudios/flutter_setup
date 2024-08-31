@@ -12,7 +12,7 @@ class RoutineDetailPage extends StatefulWidget {
   const RoutineDetailPage({super.key, required this.routine});
 
   @override
-  _RoutineDetailPageState createState() => _RoutineDetailPageState();
+  State<RoutineDetailPage> createState() => _RoutineDetailPageState();
 }
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
@@ -45,7 +45,7 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RoutineWorkoutPage(),
+          builder: (context) => const RoutineWorkoutPage(),
         ),
       );
     }).catchError((error) {
