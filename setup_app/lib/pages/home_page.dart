@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:setup_app/pages/navbar.dart';
 import 'package:setup_app/pages/new_page.dart';
 import 'package:setup_app/pages/routine_list_page.dart';
@@ -42,7 +43,7 @@ class HomePage extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 textStyle: const TextStyle(fontSize: 18),
               ),
-              child: const Text('Crear Rutina'),
+              child: const LocaleText('create_routine'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
@@ -57,7 +58,7 @@ class HomePage extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
                 textStyle: const TextStyle(fontSize: 18),
               ),
-              child: const Text('Empezar Rutina'),
+              child: const LocaleText('start_routine'),
             ),
           ],
         ),
