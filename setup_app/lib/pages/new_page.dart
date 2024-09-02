@@ -236,7 +236,19 @@ class _NewPageState extends State<NewPage> {
                             .primary
                             .withOpacity(0.1),
                         prefixIcon: const Icon(Icons.search),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                },
+                              )
+                            : null,
                       ),
+                      onChanged: (value) {
+                        // Para actualizar el estado y mostrar/ocultar la "X"
+                        (context as Element).markNeedsBuild();
+                      },
                     ),
                   ),
                 ),
@@ -274,28 +286,27 @@ class _NewPageState extends State<NewPage> {
                           ),
                           child: Column(
                             children: [
-                              exercise.images != null
-                                  ? Image.asset(
-                                      'assets/photos/${exercise.images}',
-                                      height: 40,
-                                      width: double.infinity,
-                                    )
-                                  : Container(
-                                      height: 100,
-                                      color: Colors.grey,
-                                      child:
-                                          const Center(child: Text('No Image')),
-                                    ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(1.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      exercise.images != null
+                                          ? Image.asset(
+                                              'assets/photos/${exercise.images}',
+                                              height: 74,
+                                            )
+                                          : Container(
+                                              height: 74,
+                                              color: Colors.grey,
+                                              child: const Center(
+                                                  child: Text('No Image')),
+                                            ),
                                       Text(
                                         exercise.name,
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: isSelected
                                               ? Theme.of(context)
@@ -310,20 +321,20 @@ class _NewPageState extends State<NewPage> {
                                         overflow: TextOverflow
                                             .ellipsis, // Usa puntos suspensivos si es necesario
                                       ),
-                                      const SizedBox(height: 8.0),
                                       Text(
                                         exercise.primaryMuscles.isNotEmpty
                                             ? exercise.primaryMuscles.join(', ')
                                             : Locales.string(
                                                 context, 'no_muscles_info'),
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 13,
                                           color: isSelected
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .onPrimary
                                               : Colors.grey,
                                         ),
+
                                         textAlign: TextAlign.center,
                                         maxLines: 1, // Limita a dos líneas
                                         overflow: TextOverflow
