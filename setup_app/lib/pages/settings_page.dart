@@ -3,6 +3,8 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:setup_app/main.dart';
 
+
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -18,11 +20,9 @@ class SettingsPage extends StatelessWidget {
             title: Text(Locales.string(context, 'dark_mode')),
             trailing: Consumer<ThemeNotifier>(
               builder: (context, notifier, child) {
-                // Determinar si el sistema está en modo oscuro
                 bool isSystemDarkMode =
                     MediaQuery.of(context).platformBrightness ==
                         Brightness.dark;
-                // Ajustar el switch según la preferencia del usuario o el modo del sistema
                 bool isDarkMode = notifier.themeMode == ThemeMode.system
                     ? isSystemDarkMode
                     : notifier.themeMode == ThemeMode.dark;
@@ -41,6 +41,27 @@ class SettingsPage extends StatelessWidget {
                     },
                   ),
                 );
+              },
+            ),
+          ),
+          ListTile(
+            title: Text(Locales.string(context, 'language')),
+            trailing: PopupMenuButton<String>(
+              // bandera del idioma actual
+              icon: const Icon(Icons.language),
+              onSelected: (String newValue) {
+                Locales.change(context, newValue);
+              },
+
+              itemBuilder: (BuildContext context) {
+                return languages
+                    .map<PopupMenuItem<String>>(
+                      (String value) => PopupMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList();
               },
             ),
           ),

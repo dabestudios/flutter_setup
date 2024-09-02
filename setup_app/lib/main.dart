@@ -4,18 +4,15 @@ import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/auth/auth_gate.dart';
 import 'package:setup_app/model/routine_model.dart';
-import 'package:setup_app/tables/exercise.dart';
 import 'auth/firebase_options.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 const clientId =
     '604232348381-vqjjs0pa8h0h0kh5hmomog78tv3s58a7.apps.googleusercontent.com';
-
-List<Exercise> globalExercises = [];
-
+const languages = ['en', 'es'];
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Locales.init(['en', 'es']);
+  await Locales.init(languages);
   await Firebase.initializeApp(
     name: 'dabestudios-set-up',
     options: DefaultFirebaseOptions.currentPlatform,
