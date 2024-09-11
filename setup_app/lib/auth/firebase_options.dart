@@ -63,7 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '604232348381',
     projectId: 'dabestudios-set-up',
     storageBucket: 'dabestudios-set-up.appspot.com',
-    iosBundleId: 'com.example.setupApp',
+    iosBundleId: 'com.dabestudios.setupApp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '604232348381',
     projectId: 'dabestudios-set-up',
     storageBucket: 'dabestudios-set-up.appspot.com',
-    iosBundleId: 'com.example.setupApp',
+    iosBundleId: 'com.dabestudios.setupApp',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
