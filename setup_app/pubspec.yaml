@@ -30,10 +30,10 @@ dependencies:
   shared_preferences: ^2.2.3
 
 dev_dependencies:
-
   flutter_lints: ^3.0.0
   flutter_test:
     sdk: flutter
+  table_calendar: ^3.1.2
 
 flutter:
 
@@ -46,4 +46,3 @@ flutter:
     - assets/sounds/victory.mp3
     - assets/photos/
     - assets/locales/
- 
