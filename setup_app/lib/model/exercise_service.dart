@@ -1,5 +1,6 @@
 // exercise_service.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:setup_app/tables/exercise.dart';
 
 class ExerciseService {
@@ -13,6 +14,7 @@ class ExerciseService {
       return;
     }
 
+    if (!context.mounted) return; // Asegúrate de que el contexto esté montado
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -23,31 +25,38 @@ class ExerciseService {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Force: ${exercise.force ?? "N/A"}'),
-                Text('Level: ${exercise.level}'),
-                Text('Mechanic: ${exercise.mechanic ?? "N/A"}'),
-                Text('Equipment: ${exercise.equipment ?? "N/A"}'),
-                Text('Primary Muscles: ${exercise.primaryMuscles.join(", ")}'),
                 Text(
-                    'Secondary Muscles: ${exercise.secondaryMuscles.join(", ")}'),
-                Text('Category: ${exercise.category}'),
+                    '${Locales.string(context, 'force_label')}: ${exercise.force ?? Locales.string(context, 'no_value')}'),
+                Text(
+                    '${Locales.string(context, 'level_label')}: ${exercise.level ?? Locales.string(context, 'no_value')}'),
+                Text(
+                    '${Locales.string(context, 'mechanic_label')}: ${exercise.mechanic ?? Locales.string(context, 'no_value')}'),
+                Text(
+                    '${Locales.string(context, 'equipment_label')}: ${exercise.equipment ?? Locales.string(context, 'no_value')}'),
+                Text(
+                    '${Locales.string(context, 'primary_muscles_label')}: ${exercise.primaryMuscles.join(", ")}'),
+                Text(
+                    '${Locales.string(context, 'secondary_muscles_label')}: ${exercise.secondaryMuscles.join(", ")}'),
+                Text(
+                    '${Locales.string(context, 'category_label')}: ${exercise.category}'),
                 const SizedBox(height: 10),
-                Text('Instructions:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('${Locales.string(context, 'instructions_label')}:',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 for (var instruction in exercise.instructions)
                   Text('- $instruction'),
                 const SizedBox(height: 10),
-                Text('Images:', style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('${Locales.string(context, 'images_label')}:',
+                    style: const TextStyle(fontWeight: FontWeight.bold)),
                 if (exercise.images != null)
                   Image.asset('assets/photos/${exercise.images}')
                 else
-                  Text('No images available'),
+                  Text(Locales.string(context, 'no_images_available')),
               ],
             ),
           ),
           actions: [
             TextButton(
-              child: Text('Close'),
+              child: Text(Locales.string(context, 'close')),
               onPressed: () {
                 Navigator.of(context).pop();
               },

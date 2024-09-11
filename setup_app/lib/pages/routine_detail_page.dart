@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Asegúrate de importar flutter_locales
 import 'package:provider/provider.dart'; // Importar provider
 import 'package:setup_app/model/exercise_service.dart';
 import 'package:setup_app/pages/routine_workout_page.dart';
@@ -9,10 +10,10 @@ import 'package:setup_app/tables/routine_exercise.dart';
 class RoutineDetailPage extends StatefulWidget {
   final Routine routine;
 
-  RoutineDetailPage({required this.routine});
+  const RoutineDetailPage({super.key, required this.routine});
 
   @override
-  _RoutineDetailPageState createState() => _RoutineDetailPageState();
+  State<RoutineDetailPage> createState() => _RoutineDetailPageState();
 }
 
 class _RoutineDetailPageState extends State<RoutineDetailPage> {
@@ -45,13 +46,15 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RoutineWorkoutPage(),
+          builder: (context) => const RoutineWorkoutPage(),
         ),
       );
     }).catchError((error) {
       // Maneja el error si ocurre durante el guardado
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save routine: $error')),
+        SnackBar(
+            content: Text(
+                '${Locales.string(context, 'failed_to_save_routine')} $error')), // Traducción
       );
     });
   }
@@ -60,10 +63,10 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.routine.name),
+        title: Text(Locales.string(context, 'routine_detail')), // Traducción
         actions: [
           IconButton(
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             onPressed: () {},
           ),
         ],
@@ -74,20 +77,21 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Last updated: ${widget.routine.lastDate.toLocal()}',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              '${Locales.string(context, 'last_updated')} ${widget.routine.lastDate.toLocal()}', // Traducción
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: _startWorkout, // Cambiar el método llamado aquí
-                child: Text('Start Workout'),
+                onPressed: _startWorkout,
+                child: Text(
+                    Locales.string(context, 'start_workout')), // Traducción
               ),
             ),
             const SizedBox(height: 20),
             Text(
-              'Exercises:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Locales.string(context, 'exercises'), // Traducción
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Expanded(
@@ -98,21 +102,21 @@ class _RoutineDetailPageState extends State<RoutineDetailPage> {
                     .entries
                     .map((entry) => Card(
                           key: ValueKey(entry.value),
-                          margin: EdgeInsets.symmetric(vertical: 8.0),
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
                           child: ListTile(
-                            title:
-                                Text('Exercise ID: ${entry.value.exerciseId}'),
+                            title: Text(
+                                '${Locales.string(context, 'exercise_id')}: ${entry.value.exerciseId}'), // Traducción
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Reps: ${entry.value.repetitions.join(", ")}'),
+                                    '${Locales.string(context, 'reps')}: ${entry.value.repetitions.join(", ")}'), // Traducción
                                 Text(
-                                    'Weights: ${entry.value.weights.join(", ")}'),
+                                    '${Locales.string(context, 'weights')}: ${entry.value.weights.join(", ")}'), // Traducción
                               ],
                             ),
                             trailing: IconButton(
-                              icon: Icon(Icons.info_outline),
+                              icon: const Icon(Icons.info_outline),
                               onPressed: () {
                                 _exerciseService.showExerciseInfo(
                                     context, entry.value.exerciseId);

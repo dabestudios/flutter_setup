@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:setup_app/adMob/ad_helper.dart';
 import 'package:setup_app/pages/review_and_edit_routine.dart';
@@ -8,19 +9,19 @@ class NewPage extends StatefulWidget {
   const NewPage({super.key});
 
   @override
-  _NewPageState createState() => _NewPageState();
+  State<NewPage> createState() => _NewPageState();
 }
 
 class _NewPageState extends State<NewPage> {
   BannerAd? _bannerAd;
   bool _isAdsInitialized = false;
-  List<Exercise> _selectedExercises = [];
+  final List<Exercise> _selectedExercises = [];
   List<Exercise> _exercises = [];
   List<Exercise> _filteredExercises = [];
   bool _isLoading = true;
   final ExerciseLoader _exerciseLoader = ExerciseLoader();
-  Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
-  Set<String> _muscleGroups = {};
+  final Set<String> _selectedMuscleGroups = {}; // No hay opción 'All'
+  final Set<String> _muscleGroups = {};
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -121,15 +122,13 @@ class _NewPageState extends State<NewPage> {
   }
 
   void _showFilterDialog() async {
-    final selectedGroups = Set<String>.from(_selectedMuscleGroups);
-
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
-              title: const Text('Select Muscle Groups'),
+              title: Text(Locales.string(context, 'select_muscle_groups')),
               content: SizedBox(
                 width: double.maxFinite,
                 child: Wrap(
@@ -170,7 +169,7 @@ class _NewPageState extends State<NewPage> {
               ),
               actions: <Widget>[
                 TextButton(
-                  child: const Text('Reset'),
+                  child: Text(Locales.string(context, 'reset')),
                   onPressed: () {
                     setState(() {
                       _selectedMuscleGroups.clear();
@@ -179,7 +178,7 @@ class _NewPageState extends State<NewPage> {
                   },
                 ),
                 TextButton(
-                  child: const Text('Apply'),
+                  child: Text(Locales.string(context, 'apply')),
                   onPressed: () {
                     _filterExercises();
                     Navigator.of(context).pop();
@@ -204,34 +203,13 @@ class _NewPageState extends State<NewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Routine'),
+        title: Text(Locales.string(context, 'create_routine')),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),
-            tooltip: 'Filter by muscle group',
             onPressed: _showFilterDialog,
           ),
         ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(50.0),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: 'Search exercises...',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: BorderSide.none,
-                ),
-                filled: true,
-                fillColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-          ),
-        ),
       ),
       body: _isLoading
           ? const Center(
@@ -239,6 +217,41 @@ class _NewPageState extends State<NewPage> {
             )
           : Column(
               children: [
+                const SizedBox(height: 8.0),
+                PreferredSize(
+                  preferredSize: const Size.fromHeight(50.0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: Locales.string(context, 'search_exercises'),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withOpacity(0.1),
+                        prefixIcon: const Icon(Icons.search),
+                        suffixIcon: _searchController.text.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  _searchController.clear();
+                                },
+                              )
+                            : null,
+                      ),
+                      onChanged: (value) {
+                        // Para actualizar el estado y mostrar/ocultar la "X"
+                        (context as Element).markNeedsBuild();
+                      },
+                    ),
+                  ),
+                ),
                 const SizedBox(height: 8.0),
                 Expanded(
                   child: GridView.builder(
@@ -262,7 +275,7 @@ class _NewPageState extends State<NewPage> {
                                     .colorScheme
                                     .primary
                                     .withOpacity(0.5)
-                                : Theme.of(context).colorScheme.background,
+                                : Theme.of(context).colorScheme.surface,
                             borderRadius: BorderRadius.circular(10.0),
                             border: Border.all(
                               color: isSelected
@@ -273,28 +286,27 @@ class _NewPageState extends State<NewPage> {
                           ),
                           child: Column(
                             children: [
-                              exercise.images != null
-                                  ? Image.asset(
-                                      'assets/photos/${exercise.images}',
-                                      height: 40,
-                                      width: double.infinity,
-                                    )
-                                  : Container(
-                                      height: 100,
-                                      color: Colors.grey,
-                                      child:
-                                          const Center(child: Text('No Image')),
-                                    ),
                               Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(1.0),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
+                                      exercise.images != null
+                                          ? Image.asset(
+                                              'assets/photos/${exercise.images}',
+                                              height: 74,
+                                            )
+                                          : Container(
+                                              height: 74,
+                                              color: Colors.grey,
+                                              child: const Center(
+                                                  child: Text('No Image')),
+                                            ),
                                       Text(
                                         exercise.name,
                                         style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: isSelected
                                               ? Theme.of(context)
@@ -302,24 +314,31 @@ class _NewPageState extends State<NewPage> {
                                                   .onPrimary
                                               : Theme.of(context)
                                                   .colorScheme
-                                                  .onBackground,
+                                                  .onSurface,
                                         ),
                                         textAlign: TextAlign.center,
+                                        maxLines: 2, // Limita a una línea
+                                        overflow: TextOverflow
+                                            .ellipsis, // Usa puntos suspensivos si es necesario
                                       ),
-                                      const SizedBox(height: 8.0),
                                       Text(
                                         exercise.primaryMuscles.isNotEmpty
                                             ? exercise.primaryMuscles.join(', ')
-                                            : 'No muscles info',
+                                            : Locales.string(
+                                                context, 'no_muscles_info'),
                                         style: TextStyle(
-                                          fontSize: 14,
+                                          fontSize: 13,
                                           color: isSelected
                                               ? Theme.of(context)
                                                   .colorScheme
                                                   .onPrimary
                                               : Colors.grey,
                                         ),
+
                                         textAlign: TextAlign.center,
+                                        maxLines: 1, // Limita a dos líneas
+                                        overflow: TextOverflow
+                                            .ellipsis, // Usa puntos suspensivos si es necesario
                                       ),
                                     ],
                                   ),
@@ -335,7 +354,7 @@ class _NewPageState extends State<NewPage> {
                 if (_bannerAd != null && _isAdsInitialized)
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: Container(
+                    child: SizedBox(
                       width: _bannerAd!.size.width.toDouble(),
                       height: _bannerAd!.size.height.toDouble(),
                       child: AdWidget(ad: _bannerAd!),
@@ -350,14 +369,13 @@ class _NewPageState extends State<NewPage> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
-                '${_selectedExercises.length} Exercises Selected',
-                style: const TextStyle(fontSize: 16),
+                '${Locales.string(context, 'exercises_selected')}: ${_selectedExercises.length}',
               ),
             ),
             if (_selectedExercises.isNotEmpty)
               TextButton(
-                child: const Text('Save Routine'),
                 onPressed: _createRoutine,
+                child: Text(Locales.string(context, 'save_routine')),
               ),
           ],
         ),

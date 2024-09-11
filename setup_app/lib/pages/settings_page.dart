@@ -1,31 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart';
 import 'package:provider/provider.dart';
 import 'package:setup_app/main.dart';
 
+
+
 class SettingsPage extends StatelessWidget {
+  const SettingsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        title: Text(Locales.string(context, 'settings')),
       ),
       body: ListView(
         children: <Widget>[
           ListTile(
-            title: Text('Dark Mode'),
+            title: Text(Locales.string(context, 'dark_mode')),
             trailing: Consumer<ThemeNotifier>(
               builder: (context, notifier, child) {
-                // Determinar si el sistema está en modo oscuro
                 bool isSystemDarkMode =
                     MediaQuery.of(context).platformBrightness ==
                         Brightness.dark;
-                // Ajustar el switch según la preferencia del usuario o el modo del sistema
                 bool isDarkMode = notifier.themeMode == ThemeMode.system
                     ? isSystemDarkMode
                     : notifier.themeMode == ThemeMode.dark;
 
                 return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 750),
+                  duration: const Duration(milliseconds: 750),
                   transitionBuilder:
                       (Widget child, Animation<double> animation) {
                     return ScaleTransition(scale: animation, child: child);
@@ -42,15 +45,36 @@ class SettingsPage extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('Option 1'),
-            subtitle: Text('Description for option 1'),
+            title: Text(Locales.string(context, 'language')),
+            trailing: PopupMenuButton<String>(
+              // bandera del idioma actual
+              icon: const Icon(Icons.language),
+              onSelected: (String newValue) {
+                Locales.change(context, newValue);
+              },
+
+              itemBuilder: (BuildContext context) {
+                return languages
+                    .map<PopupMenuItem<String>>(
+                      (String value) => PopupMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      ),
+                    )
+                    .toList();
+              },
+            ),
+          ),
+          ListTile(
+            title: Text(Locales.string(context, 'option_1')),
+            subtitle: Text(Locales.string(context, 'description_option_1')),
             onTap: () {
               // Funcionalidad futura
             },
           ),
           ListTile(
-            title: Text('Option 2'),
-            subtitle: Text('Description for option 2'),
+            title: Text(Locales.string(context, 'option_2')),
+            subtitle: Text(Locales.string(context, 'description_option_2')),
             onTap: () {
               // Funcionalidad futura
             },

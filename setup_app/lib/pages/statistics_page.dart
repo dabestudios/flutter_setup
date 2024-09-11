@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:setup_app/model/work_out_service.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Importa flutter_locales
 
 class StatisticsPage extends StatefulWidget {
+  const StatisticsPage({super.key});
+
   @override
-  _StatisticsPageState createState() => _StatisticsPageState();
+  State<StatisticsPage> createState() => _StatisticsPageState();
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
@@ -32,28 +35,29 @@ class _StatisticsPageState extends State<StatisticsPage> {
   }
 
   Widget _buildRoutineCard(Map<String, dynamic> routine) {
-    String routineName = routine['name'] ?? 'Sin nombre';
-    String lastDate = routine['lastDate'] ?? 'Fecha no disponible';
+    String routineName = routine['name'];
+    String lastDate = routine['date'];
     int exerciseCount = routine['exercises']?.length ?? 0;
 
     return Card(
       child: ListTile(
         title: Text(
           routineName,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 8.0),
-            Text('Fecha de la última rutina: $lastDate'),
-            Text('Número de ejercicios: $exerciseCount'),
-            SizedBox(height: 8.0),
+            const SizedBox(height: 8.0),
+            Text('${Locales.string(context, 'last_date')}: $lastDate'),
+            Text(
+                '${Locales.string(context, 'exercise_count')}: $exerciseCount'),
+            const SizedBox(height: 8.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: routine['exercises']?.map<Widget>((exercise) {
-                    String exerciseId =
-                        exercise['exerciseId'] ?? 'ID no disponible';
+                    String exerciseId = exercise['exerciseId'] ??
+                        Locales.string(context, 'exercise');
                     List<dynamic> repetitions = exercise['repetitions'] ?? [];
                     List<dynamic> weights = exercise['weights'] ?? [];
                     List<dynamic> completionStatus =
@@ -64,12 +68,15 @@ class _StatisticsPageState extends State<StatisticsPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Ejercicio: $exerciseId'),
-                          Text('Repeticiones: ${repetitions.join(", ")}'),
-                          Text('Pesos: ${weights.join(", ")}'),
                           Text(
-                              'Completado: ${completionStatus.map((status) => status ? "Sí" : "No").join(", ")}'),
-                          Divider(),
+                              '${Locales.string(context, 'exercise')}: $exerciseId'),
+                          Text(
+                              '${Locales.string(context, 'repetitions')}: ${repetitions.join(", ")}'),
+                          Text(
+                              '${Locales.string(context, 'weights')}: ${weights.join(", ")}'),
+                          Text(
+                              '${Locales.string(context, 'completed')}: ${completionStatus.map((status) => status ? Locales.string(context, 'yes') : Locales.string(context, 'no')).join(", ")}'),
+                          const Divider(),
                         ],
                       ),
                     );
@@ -95,12 +102,14 @@ class _StatisticsPageState extends State<StatisticsPage> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Fecha: ${stat['date']}'),
-                Text('Repeticiones: ${stat['repetitions'].join(", ")}'),
-                Text('Pesos: ${stat['weights'].join(", ")}'),
+                Text('${Locales.string(context, 'date')}: ${stat['date']}'),
                 Text(
-                    'Completado: ${stat['completionStatus'].map((status) => status ? "Sí" : "No").join(", ")}'),
-                SizedBox(height: 8.0),
+                    '${Locales.string(context, 'repetitions')}: ${stat['repetitions'].join(", ")}'),
+                Text(
+                    '${Locales.string(context, 'weights')}: ${stat['weights'].join(", ")}'),
+                Text(
+                    '${Locales.string(context, 'completed')}: ${stat['completionStatus'].map((status) => status ? Locales.string(context, 'yes') : Locales.string(context, 'no')).join(", ")}'),
+                const SizedBox(height: 8.0),
               ],
             );
           }).toList(),
@@ -116,33 +125,33 @@ class _StatisticsPageState extends State<StatisticsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Estadísticas'),
+        title: Text(Locales.string(context, 'statistics')),
       ),
       body: _routines.isEmpty && _exerciseStats.isEmpty
-          ? Center(child: Text('No hay estadísticas guardadas.'))
+          ? Center(child: Text(Locales.string(context, 'no_statistics')))
           : ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Estadísticas de Rutinas',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Locales.string(context, 'routine_statistics'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
-                ..._routines
-                    .map((routine) => _buildRoutineCard(routine))
-                    .toList(),
+                ..._routines.map((routine) => _buildRoutineCard(routine)),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'Estadísticas de Ejercicios',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Locales.string(context, 'exercise_statistics'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 ..._exerciseStats.entries.map((entry) {
                   return _buildExerciseStatsCard(
                       entry.key, List<dynamic>.from(entry.value['data']));
-                }).toList(),
+                }),
               ],
             ),
     );

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_locales/flutter_locales.dart'; // Asegúrate de importar flutter_locales
 import 'package:setup_app/pages/routine_detail_page.dart';
 import 'package:setup_app/tables/routine.dart';
 import 'package:setup_app/model/routine_storage.dart';
 
 class RoutineListPage extends StatefulWidget {
+  const RoutineListPage({super.key});
+
   @override
-  _RoutineListPageState createState() => _RoutineListPageState();
+  State<RoutineListPage> createState() => _RoutineListPageState();
 }
 
 class _RoutineListPageState extends State<RoutineListPage> {
@@ -23,10 +26,10 @@ class _RoutineListPageState extends State<RoutineListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Routines'),
+        title: Text(Locales.string(context, 'my_routines')), // Traducción
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               // Agrega una nueva rutina (implementar esta funcionalidad)
             },
@@ -37,7 +40,7 @@ class _RoutineListPageState extends State<RoutineListPage> {
         future: _routinesFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -45,7 +48,9 @@ class _RoutineListPageState extends State<RoutineListPage> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No routines found.'));
+            return Center(
+                child: Text(Locales.string(
+                    context, 'no_routines_found'))); // Traducción
           }
 
           final routines = snapshot.data!;
@@ -64,19 +69,21 @@ class _RoutineListPageState extends State<RoutineListPage> {
                   );
                 },
                 child: Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: ListTile(
-                    contentPadding: EdgeInsets.all(16.0),
-                    leading: Icon(Icons.fitness_center, size: 40),
+                    contentPadding: const EdgeInsets.all(16.0),
+                    leading: const Icon(Icons.fitness_center, size: 40),
                     title: Text(
                       routine.name,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    subtitle:
-                        Text('Last updated: ${routine.lastDate.toLocal()}'),
+                    subtitle: Text(
+                      '${Locales.string(context, 'last_updated')} ${routine.lastDate.toLocal()}', // Traducción
+                    ),
                     trailing: IconButton(
-                      icon: Icon(Icons.edit),
+                      icon: const Icon(Icons.edit),
                       onPressed: () {
                         // Navega a la pantalla de edición
                       },
